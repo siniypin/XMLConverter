@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<products>
+    <product>
+        <actual_price>actual_price</actual_price>
+        <actual_price_currency>actual_price/_currency</actual_price_currency>
+        <actual_price_source>actual_price/_source</actual_price_source>
+        <article_nr>article_nr</article_nr>
+        <bewertung>bewertung</bewertung>
+        <category>category</category>
+        <color>color</color>
+        <image>image</image>
+        <image_alt>image/_alt</image_alt>
+        <material>material</material>
+        <name>name</name>
+        <old_price>old_price</old_price>
+        <old_price_currency>old_price/_currency</old_price_currency>
+        <old_price_source>old_price/_source</old_price_source>
+        <pageUrl>pageUrl</pageUrl>
+        <serie>serie</serie>
+        <shipment_cost>shipment_cost</shipment_cost>
+        <shipment_time>shipment_time</shipment_time>
+        <size>size</size>
+    </product>
+    <product>
+        <actual_price>actual_price1</actual_price>
+        <actual_price_currency>actual_price/_currency</actual_price_currency>
+        <actual_price_source>actual_price/_source</actual_price_source>
+        <article_nr>article_nr</article_nr>
+        <bewertung>bewertung</bewertung>
+        <category>category1212</category>
+        <color>color</color>
+        <image>image</image>
+        <image_alt>image/_alt</image_alt>
+        <material>material</material>
+        <name>name</name>
+        <old_price>old_price</old_price>
+        <old_price_currency>old_price/_currency</old_price_currency>
+        <old_price_source>old_price/_source</old_price_source>
+        <pageUrl>pageUrl</pageUrl>
+        <serie>serie</serie>
+        <shipment_cost>shipment_cost</shipment_cost>
+        <shipment_time>shipment_time</shipment_time>
+        <size>size</size>
+    </product>
+    <product>
+        <actual_price>140</actual_price>
+        <actual_price_currency>EUR</actual_price_currency>
+        <actual_price_source>159,99 ���</actual_price_source>
+        <article_nr>M-WW-1113-0002-C</article_nr>
+        <bewertung>0 von 5 Sternen</bewertung>
+        <category>Startseite &gt; M̦bel &gt; Badezimmer &gt; Badregale</category>
+        <color>Eiche Natur</color>
+        <image>
+            http://cdn.home24.net/images/media/catalog/product/410x410/png/b/a/badstaender-caddy-mezza-eiche-natur-327191.jpg
+        </image>
+        <image_alt>Badst�_nder Caddy - Mezza Eiche Natur</image_alt>
+        <material>Massivholz Eiche, lackiert</material>
+        <name>Badst�_nder Caddy</name>
+        <old_price>159.99</old_price>
+        <old_price_currency>EUR</old_price_currency>
+        <old_price_source>159,99 ���</old_price_source>
+        <pageUrl>http://www.home24.de/wireworks/badstaender-caddy-mezza-eiche-natur-894658</pageUrl>
+        <serie>Serie Test</serie>
+        <shipment_cost>0</shipment_cost>
+        <shipment_time>Lieferzeit: 5 Wochen</shipment_time>
+        <size>Breite: 22 cm H̦he: 84 cm Tiefe: 26 cm</size>
+    </product>
+    <product>
+        <actual_price>74.99</actual_price>
+        <actual_price_currency>EUR</actual_price_currency>
+        <actual_price_source>74,99 ���</actual_price_source>
+        <article_nr>M-ZU-0315-0007-C</article_nr>
+        <bewertung>0 von 5 Sternen</bewertung>
+        <category>Startseite &gt; Accessoires &gt; Badaccessoires &gt; Aufbewahrung &gt; Handtuchhalter</category>
+        <color>Wei��</color>
+        <image>http://cdn.home24.net/images/media/catalog/product/410x410/png/d/e/dekoleiter-stahl-weiss-2494342.jpg
+        </image>
+        <image_alt>Dekoleiter - Stahl - Wei��</image_alt>
+        <material>Stahl,lackiert</material>
+        <name>Dekoleiter</name>
+        <old_price>74.99</old_price>
+        <old_price_currency>EUR</old_price_currency>
+        <old_price_source>74,99 ���</old_price_source>
+        <pageUrl>http://www.home24.de/zuiver/dekoleiter-stahl-weiss-1700610</pageUrl>
+        <serie>Startseite</serie>
+        <shipment_cost>10</shipment_cost>
+        <shipment_time>Lieferzeit: 8 Wochen</shipment_time>
+        <size>Breite: 54 cm H̦he : 175 cm Tiefe: 2 cm</size>
+    </product>
+    <product>
+        <actual_price>119.99</actual_price>
+        <actual_price_currency>EUR</actual_price_currency>
+        <actual_price_source>119,99 ���</actual_price_source>
+        <article_nr>M-NIC-000052-C</article_nr>
+        <bewertung>0 von 5 Sternen</bewertung>
+        <category>Startseite &gt; Accessoires &gt; Badaccessoires</category>
+        <color>Chrom</color>
+        <image>
+            http://cdn.home24.net/images/media/catalog/product/410x410/png/d/u/duschregal-nero-silber-2-koerbe-518508.jpg
+        </image>
+        <image_alt>Duschregal Nero - Silber, 2 K̦rbe</image_alt>
+        <material>Edelstahl verchromt</material>
+        <name>Duschregal Nero</name>
+        <old_price>119.99</old_price>
+        <old_price_currency>EUR</old_price_currency>
+        <old_price_source>119,99 ���</old_price_source>
+        <pageUrl>http://www.home24.de/nicol-wohnausstattungen/duschregal-nero-silber-2-koerbe-985809</pageUrl>
+        <serie></serie>
+        <shipment_cost>Kostenloser Versand und R�_ckversand</shipment_cost>
+        <shipment_time>Lieferzeit: 4 Werktage</shipment_time>
+        <size>Breite: 24,5 cm H̦he: 64 cm Tiefe: 22 cm</size>
+    </product>
+    <product>
+        <actual_price>169.99</actual_price>
+        <actual_price_currency>EUR</actual_price_currency>
+        <actual_price_source>169,99 ���</actual_price_source>
+        <article_nr>M-WW-1113-0052-C</article_nr>
+        <bewertung>0 von 5 Sternen</bewertung>
+        <category>Startseite &gt; M̦bel &gt; Badezimmer &gt; Badregale</category>
+        <color>Wei��</color>
+        <image>http://cdn.home24.net/images/media/catalog/product/410x410/png/b/a/badstaender-caddy-weiss-327333.jpg
+        </image>
+        <image_alt>Badst�_nder Caddy - Wei��</image_alt>
+        <material>Massivholz Eiche, lackiert</material>
+        <name>Badst�_nder Caddy</name>
+        <old_price>169.99</old_price>
+        <old_price_currency>EUR</old_price_currency>
+        <old_price_source>169,99 ���</old_price_source>
+        <pageUrl>http://www.home24.de/wireworks/badstaender-caddy-weiss-894707</pageUrl>
+        <serie></serie>
+        <shipment_cost>Kostenloser Versand und R�_ckversand</shipment_cost>
+        <shipment_time>Lieferzeit: 5 Wochen</shipment_time>
+        <size>Breite: 22 cm H̦he: 83 cm Tiefe: 26 cm</size>
+    </product>
+</products>
