@@ -18,15 +18,20 @@ public class UUIDGeneratorAdapter implements MappingAdapter {
     public List<String> process(MappingRule rule, InputData data) throws MappingException {
 
         List<String> resultValues = new ArrayList<>();
+        if(rule.getAdapterAgrs() == null)
+            throw new MappingException(this.getClass().getSimpleName() + ": Adapter arguments are not set");
 
-        String value = data.getPairs().get(rule.getSource());
+        String[] sources = rule.getAdapterAgrs().split(",");
 
-        if(value == null) {
-            throw new MappingException(this.getClass().getSimpleName() + ": Source not found: " + rule.getSource());
+        String base = sources[0];
+
+        if(sources.length > 1) {
+            for (int i = 1; i < sources.length; i++) {
+                base += data.getPairs().get(sources[i]);
+            }
         }
 
-        resultValues.add(Generators.nameBasedGenerator().generate(value).toString());
-
+        resultValues.add(Generators.nameBasedGenerator().generate(base).toString());
         return resultValues;
     }
 }

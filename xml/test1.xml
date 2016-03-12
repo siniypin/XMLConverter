@@ -11,7 +11,7 @@
         <image>image</image>
         <image_alt>image/_alt</image_alt>
         <material>material</material>
-        <name>name</name>
+        <name>name1</name>
         <old_price>old_price</old_price>
         <old_price_currency>old_price/_currency</old_price_currency>
         <old_price_source>old_price/_source</old_price_source>

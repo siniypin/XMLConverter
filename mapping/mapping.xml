@@ -48,18 +48,26 @@
     <bean id="dataMapping" class="com.piskunov.xmlconverter.mapping.DataMapping">
         <property name="rules">
             <list>
-
                 <bean class="com.piskunov.xmlconverter.mapping.MappingRule">
                     <property name="target" value="category_id"/>
                     <property name="source" value="category"/>
                     <property name="adapter">
-                        <bean class="com.piskunov.xmlconverter.mapping.adapters.DictionaryAdapter">
-                            <property name="resource" value="file:dictionary/caterogy.csv"/>
+                        <bean class="com.piskunov.xmlconverter.mapping.adapters.CategoryAdapter">
+                            <property name="categoryDictionary">
+                                <bean class="com.piskunov.xmlconverter.mapping.adapters.Dictionary">
+                                    <property name="dictionaryFile" value="file:dictionary/caterogy.csv"/>
+                                </bean>
+                            </property>
+                            <property name="nameDictionary">
+                                <bean class="com.piskunov.xmlconverter.mapping.adapters.Dictionary">
+                                    <property name="dictionaryFile" value="file:dictionary/name.csv"/>
+                                </bean>
+                            </property>
                         </bean>
                     </property>
+                    <property name="adapterAgrs" value="name"/>
                     <property name="skipRecordOnError" value="true"/>
                     <property name="required" value="true"/>
-
                 </bean>
 
                 <bean class="com.piskunov.xmlconverter.mapping.MappingRule">
@@ -167,10 +175,10 @@
 
                 <bean class="com.piskunov.xmlconverter.mapping.MappingRule">
                     <property name="target" value="uid"/>
-                    <property name="source" value="name"/>
                     <property name="adapter">
                         <bean class="com.piskunov.xmlconverter.mapping.adapters.UUIDGeneratorAdapter"/>
                     </property>
+                    <property name="adapterAgrs" value="#{sessionParmeters.partnerID},color,name"/>
                 </bean>
 
                 <bean class="com.piskunov.xmlconverter.mapping.MappingRule">

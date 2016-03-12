@@ -43,106 +43,90 @@ public class MappingProcessor implements ItemProcessor<InputData, DataMapping> {
 
         if (!validated) {
             validateMappingRules();
-            validated = true;
         }
 
         List<String> resultLines = new LinkedList<>();
-
         resultLines.add("");
 
-        List<MappingRule> rules = dataMapping.getRules();
+        //iterator over mapping rules
+        for (MappingRule rule : dataMapping.getRules()) {
 
-        for (Iterator iterator = rules.iterator(); iterator.hasNext(); ) {
-
-            List<String> values = null;
-
+            List<String> fieldMappingValues;
             LinkedList<String> tmpLines = new LinkedList<>();
-
-            MappingRule rule = null;
 
             try {
 
-                rule = (MappingRule) iterator.next();
-
-                values = applyRule(rule, data);
-
-                if(values.size() == 0) {
-                    values.add("");
+                fieldMappingValues = applyRule(rule, data);
+                if (fieldMappingValues.size() == 0) {
+                    fieldMappingValues.add("");
                 }
 
-                for (String value : values) {
+                //add screening characters and delimiter
+                for (String fieldMappingValue : fieldMappingValues) {
 
                     for (String line : resultLines) {
-
-                        line += "\"" + value + "\"";
-                        if (iterator.hasNext()) {
-                            line += dataMapping.getDelimiter();
-                        }
-
+                        line += "\"" + fieldMappingValue + "\"" + dataMapping.getDelimiter();
                         tmpLines.add(line);
                     }
                 }
 
             } catch (MappingException e) {
 
+                //mapping exception handling
                 logger.warning(e.getMessage());
 
-                if(rule.isSkipRecordOnError()) {
-
-                    logger.warning("Record skipped: " + data.getSource());
-                    Writer output = null;
-
-                    try{
-
-                        File file = skippedItemsLog.getFile();
-                        if(!file.exists()) {
-                            file.getParentFile().mkdirs();
-                            file.createNewFile();
-                        }
-
-                        output = new BufferedWriter(new FileWriter(file, true));
-                        output.append(data.getSource() + "\n");
-
-                    }catch(IOException ioe){
-                        ioe.printStackTrace();
-                    } finally {
-                        if(output != null)
-                            try {
-                                output.close();
-                            } catch (IOException ioe) {
-                                ioe.printStackTrace();
-                            }
-                    }
+                if (rule.isSkipRecordOnError()) {
+                    logSkippedRecord(data);
                     return null;
                 }
 
                 for (String line : resultLines) {
-
-                    line += "";
-                    if (iterator.hasNext()) {
-                        line += dataMapping.getDelimiter();
-                    }
-
+                    line += dataMapping.getDelimiter();
                     tmpLines.add(line);
                 }
-
             }
-
             resultLines = tmpLines;
         }
 
-        String result = "";
 
-        for(Iterator iter = resultLines.iterator(); iter.hasNext();){
-            result += iter.next();
-            if(iter.hasNext()) {
-                result +="\n";
+        //make ret value: remove last delimiter, add line separator
+        String ret = "";
+
+        for (String line : resultLines) {
+            if (line.endsWith(dataMapping.getDelimiter())) {
+                line = line.substring(0, line.length() - 1);
             }
+            ret += line + "\n";
         }
-
-        dataMapping.setResult(result);
+        ret = ret.substring(0, ret.length() - 1);
+        dataMapping.setResult(ret);
 
         return dataMapping;
+    }
+
+    private void logSkippedRecord(InputData data) {
+
+        logger.warning("Record skipped: " + data.getSource());
+        Writer output = null;
+        try {
+            File file = skippedItemsLog.getFile();
+            if (!file.exists()) {
+                file.getParentFile().mkdirs();
+                file.createNewFile();
+            }
+            output = new BufferedWriter(new FileWriter(file, true));
+            output.append(data.getSource() + "\n");
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        } finally {
+            if (output != null)
+                try {
+                    output.close();
+                } catch (IOException ioe) {
+                    ioe.printStackTrace();
+                }
+        }
+
     }
 
 
@@ -229,6 +213,7 @@ public class MappingProcessor implements ItemProcessor<InputData, DataMapping> {
 
         }
 
+        validated = true;
     }
 
 

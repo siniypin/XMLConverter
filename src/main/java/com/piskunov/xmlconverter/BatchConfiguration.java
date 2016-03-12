@@ -31,6 +31,7 @@ import org.springframework.oxm.xstream.XStreamMarshaller;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.logging.Logger;
 
 /**
  * Created by Vladimir Piskunov on 2/27/16.
@@ -51,51 +52,31 @@ public class BatchConfiguration {
     @Autowired
     public ResourceLoader resourceLoader;
 
-
-            /*<bean id="multiResourceReader"
-    class=" org.springframework.batch.item.file.MultiResourceItemReader">
-    <property name="resources" value="file:csv/inputs/domain-*.csv" />
-    <property name="delegate" ref="flatFileItemReader" />
-    </bean>
-    */
-
-
     @Bean
-    public MultiResourceItemReader multiResourceItemReader() {
-
+    public MultiResourceItemReader multiResourceItemReader(StaxEventItemReader<InputData> xmlReader) throws IOException {
         MultiResourceItemReader mReader = new MultiResourceItemReader();
-
-        try {
-            mReader.setResources(ResourcePatternUtils.getResourcePatternResolver(resourceLoader).getResources("file:xml/*.xml"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        mReader.setDelegate(xmlReader());
+        mReader.setResources(ResourcePatternUtils.getResourcePatternResolver(resourceLoader).getResources("file:xml/*.xml"));
+        mReader.setDelegate(xmlReader);
         return mReader;
     }
 
 
     @Bean
-    public StaxEventItemReader<InputData> xmlReader() {
+    public StaxEventItemReader<InputData> xmlReader(Unmarshaller unmarshaller) {
         StaxEventItemReader<InputData> reader = new StaxEventItemReader<InputData>();
         reader.setFragmentRootElementName("product");
-     //   reader.setResource(new FileSystemResource("xml/test.xml"));
-        reader.setUnmarshaller(unmarshaller());
+        reader.setUnmarshaller(unmarshaller);
         return reader;
     }
 
 
     @Bean
-    public Unmarshaller unmarshaller() {
+    public Unmarshaller unmarshaller(Converter inputDataConverter) {
         XStreamMarshaller unmarshaller = new XStreamMarshaller();
-
         HashMap<String, Class> aliases = new HashMap<>();
         aliases.put("product", InputData.class);
         unmarshaller.setAliases(aliases);
-
-        unmarshaller.setConverters(inputDataConverter());
-
+        unmarshaller.setConverters(inputDataConverter);
         return unmarshaller;
     }
 
@@ -104,15 +85,19 @@ public class BatchConfiguration {
         return new XMLUnmarshaller();
     }
 
-   /*
     @Bean
-    public Unmarshaller unmarshaller() {
-        Jaxb2Marshaller unmarshaller = new Jaxb2Marshaller();
-        unmarshaller.setClassesToBeBound(InputData.class);
-
-        return unmarshaller;
+    public FlatFileItemWriter<DataMapping> csvWriter() {
+        FlatFileItemWriter<DataMapping> writer = new FlatFileItemWriter<>();
+        writer.setResource(new FileSystemResource("cvs/report.csv"));
+        writer.setShouldDeleteIfExists(true);
+        BeanWrapperFieldExtractor<DataMapping> beanWrapperFieldExtractor = new BeanWrapperFieldExtractor<>();
+        beanWrapperFieldExtractor.setNames(new String[]{"result"});
+        DelimitedLineAggregator<DataMapping> delimitedLineAggregator = new DelimitedLineAggregator<>();
+        delimitedLineAggregator.setDelimiter(",");
+        delimitedLineAggregator.setFieldExtractor(beanWrapperFieldExtractor);
+        writer.setLineAggregator(delimitedLineAggregator);
+        return writer;
     }
-    */
 
     @Bean
     public MappingProcessor processor() {
@@ -122,41 +107,21 @@ public class BatchConfiguration {
     }
 
     @Bean
-    public FlatFileItemWriter<DataMapping> csvWriter() {
-        FlatFileItemWriter<DataMapping> writer = new FlatFileItemWriter<>();
-        writer.setResource(new FileSystemResource("cvs/report.csv"));
-        writer.setShouldDeleteIfExists(true);
-
-        BeanWrapperFieldExtractor<DataMapping> beanWrapperFieldExtractor = new BeanWrapperFieldExtractor<>();
-
-        beanWrapperFieldExtractor.setNames(new String[]{"result"});
-
-        DelimitedLineAggregator<DataMapping> delimitedLineAggregator = new DelimitedLineAggregator<>();
-        delimitedLineAggregator.setDelimiter(",");
-        delimitedLineAggregator.setFieldExtractor(beanWrapperFieldExtractor);
-
-        writer.setLineAggregator(delimitedLineAggregator);
-
-        return writer;
-    }
-
-    @Bean
-    public Job xml2csvJob() {
+    public Job xml2csvJob(Step xml2csvJobStep) throws IOException {
         return jobBuilderFactory.get("xml2csvJob")
                 .incrementer(new RunIdIncrementer())
-                .flow(xml2csvJobStep())
+                .flow(xml2csvJobStep)
                 .end()
                 .build();
     }
 
-
     @Bean
-    public Step xml2csvJobStep() {
+    public Step xml2csvJobStep(MappingProcessor processor, FlatFileItemWriter<DataMapping> csvWriter, MultiResourceItemReader multiResourceItemReader) throws IOException {
         return stepBuilderFactory.get("xml2csvJobStep")
                 .<InputData, DataMapping> chunk(1)
-                .reader(multiResourceItemReader())
-                .processor(processor())
-                .writer(csvWriter())
+                .reader(multiResourceItemReader)
+                .processor(processor)
+                .writer(csvWriter)
                 .build();
     }
 
