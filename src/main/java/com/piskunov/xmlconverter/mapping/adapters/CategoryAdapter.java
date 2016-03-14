@@ -1,15 +1,11 @@
 package com.piskunov.xmlconverter.mapping.adapters;
 
+import com.piskunov.xmlconverter.mapping.Dictionary;
 import com.piskunov.xmlconverter.mapping.InputData;
 import com.piskunov.xmlconverter.mapping.MappingException;
 import com.piskunov.xmlconverter.mapping.MappingRule;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
 
-import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Vladimir Piskunov on 2/29/16.

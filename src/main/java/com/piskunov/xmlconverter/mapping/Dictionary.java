@@ -1,4 +1,4 @@
-package com.piskunov.xmlconverter.mapping.adapters;
+package com.piskunov.xmlconverter.mapping;
 
 import org.springframework.core.io.Resource;
 
@@ -48,21 +48,10 @@ public class Dictionary {
         ArrayList<String> ret = new ArrayList<>();
 
         for (String dictionaryKey : dictionary.keySet()) {
-
-            Logger.getLogger(getClass().getName()).severe("" + searchByRegExp + " " + key + "/" + dictionaryKey);
-
-
             if ((searchByRegExp && key.matches(dictionaryKey))
                     || (!searchByRegExp && key.equals(dictionaryKey))) {
-
-                Logger.getLogger(getClass().getName()).severe(dictionary.get(dictionaryKey));
                 ret.add(dictionary.get(dictionaryKey));
-                Logger.getLogger(getClass().getName()).severe("true");
             }
-            else {
-                Logger.getLogger(getClass().getName()).severe("false");
-            }
-
         }
         return ret;
     }

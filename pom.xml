@@ -24,20 +24,15 @@
 	</properties>
 
 	<dependencies>
-
-
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-batch</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-
 		<!-- Spring XML to/back object -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -45,14 +40,11 @@
 			<version>${spring.version}</version>
 
 		</dependency>
-
 		<dependency>
 			<groupId>com.fasterxml.uuid</groupId>
 			<artifactId>java-uuid-generator</artifactId>
 			<version>3.1.3</version>
 		</dependency>
-
-
 	</dependencies>
 
 	<build>
@@ -60,34 +52,40 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-
-
-			<plugin>
-				<artifactId>maven-antrun-plugin</artifactId>
 				<executions>
 					<execution>
-						<phase>validate</phase>
 						<goals>
-							<goal>run</goal>
+							<goal>repackage</goal>
 						</goals>
-						<configuration>
-							<tasks>
-								<copy todir="target/dictionary" overwrite="true">
-									<fileset dir="dictionary"/>
-								</copy>
-								<copy todir="target/xml" overwrite="true">
-									<fileset dir="xml"/>
-								</copy>
-								<copy todir="target/mapping" overwrite="true">
-									<fileset dir="mapping"/>
-								</copy>
-							</tasks>
-						</configuration>
 					</execution>
 				</executions>
 			</plugin>
 
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${basedir}</directory>
+									<includes>
+										<include>mapping/**</include>
+										<include>dictionary/**</include>
+										<include>xml/**</include>
+									</includes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 

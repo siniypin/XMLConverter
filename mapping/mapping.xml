@@ -54,12 +54,12 @@
                     <property name="adapter">
                         <bean class="com.piskunov.xmlconverter.mapping.adapters.CategoryAdapter">
                             <property name="categoryDictionary">
-                                <bean class="com.piskunov.xmlconverter.mapping.adapters.Dictionary">
+                                <bean class="com.piskunov.xmlconverter.mapping.Dictionary">
                                     <property name="dictionaryFile" value="file:dictionary/caterogy.csv"/>
                                 </bean>
                             </property>
                             <property name="nameDictionary">
-                                <bean class="com.piskunov.xmlconverter.mapping.adapters.Dictionary">
+                                <bean class="com.piskunov.xmlconverter.mapping.Dictionary">
                                     <property name="dictionaryFile" value="file:dictionary/name.csv"/>
                                 </bean>
                             </property>
