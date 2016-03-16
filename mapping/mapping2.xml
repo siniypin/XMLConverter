@@ -98,12 +98,14 @@
                     <property name="target" value="name"/>
                     <property name="source" value="NAME"/>
                     <property name="required" value="true"/>
+                    <property name="skipRecordOnError" value="true"/>
                 </bean>
 
                 <bean class="com.piskunov.xmlconverter.mapping.MappingRule">
                     <property name="target" value="price"/>
                     <property name="source" value="PRICE"/>
                     <property name="required" value="true"/>
+                    <property name="skipRecordOnError" value="true"/>
                 </bean>
 
                 <bean class="com.piskunov.xmlconverter.mapping.MappingRule">
@@ -115,7 +117,7 @@
                     <property name="target" value="currency"/>
                     <property name="source" value="CURRENCY"/>
                     <property name="equalsTo" value="EUR"/>
-
+                    <property name="skipRecordOnError" value="true"/>
                 </bean>
 
                 <bean class="com.piskunov.xmlconverter.mapping.MappingRule">
@@ -242,7 +244,6 @@
                             <property name="expression" value=".*([w|W]erktag[e]?|[S|s]tunde[n]?).*"/>
                         </bean>
                     </property>
-
                 </bean>
 
                 <bean class="com.piskunov.xmlconverter.mapping.MappingRule">
