@@ -51,6 +51,8 @@ public class JobWrapper {
     public final String XML_TYPE = "xml";
     public final String CSV_TYPE = "csv";
 
+    private boolean active = true;
+
     private String inputDataType = XML_TYPE;
     private String outputDataType = CSV_TYPE;
     private String inputFolder = "input";
@@ -61,6 +63,14 @@ public class JobWrapper {
     private String inputCSVDelimiter = ",";
     private String partnerID;
     private String sessionName;
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 
     public String getSessionName() {
         return sessionName;
@@ -137,9 +147,15 @@ public class JobWrapper {
 
     public Job getJob() throws MappingException, IOException {
 
+        if(!active) {
+            return null;
+        }
+
         if(dataMapping == null) {
             throw new MappingException("Data Mapping is not set for JobConfigurator");
         }
+
+        processor.resetProcessor();
 
         SimpleDateFormat sdfDate = new SimpleDateFormat("MMddHHmmss");
         Date now = new Date();
