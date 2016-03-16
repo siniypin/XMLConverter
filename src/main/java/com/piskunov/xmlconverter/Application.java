@@ -1,5 +1,6 @@
 package com.piskunov.xmlconverter;
 
+import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.boot.SpringApplication;
@@ -17,10 +18,11 @@ public class Application {
 
 		JobLauncher launcher = context.getBean(JobLauncher.class);
 
-		Map m = context.getBeansOfType(JobWrapper.class);
-
 		for(JobWrapper jobWrapper : context.getBeansOfType(JobWrapper.class).values()) {
-			launcher.run(jobWrapper.getJob(), new JobParameters());
+			Job job = jobWrapper.getJob();
+			if(job != null) {
+				launcher.run(job, new JobParameters());
+			}
 		}
 
 	}

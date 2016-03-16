@@ -19,12 +19,12 @@ import java.util.logging.Logger;
 public class MappingProcessor implements ItemProcessor<InputData, OutputData> {
 
     private static Logger logger = Logger.getLogger(MappingProcessor.class.getName());
-
     private DataMapping dataMapping;
-
     private Resource skippedItemsLog;
-
     private boolean printHeaders = true;
+
+    private int processedLines;
+    private int skippedLines;
 
     public Resource getSkippedItemsLog() {
         return skippedItemsLog;
@@ -50,8 +50,15 @@ public class MappingProcessor implements ItemProcessor<InputData, OutputData> {
         this.printHeaders = printHeaders;
     }
 
+    public void resetProcessor(){
+        skippedLines = 0;
+        processedLines = 0;
+    }
+
     @Override
     public OutputData process(InputData data) throws Exception {
+
+        processedLines++;
 
         List<String> resultLines = new LinkedList<>();
 
@@ -119,7 +126,6 @@ public class MappingProcessor implements ItemProcessor<InputData, OutputData> {
 
     private void logSkippedRecord(InputData data) {
 
-        logger.warning("Record skipped: " + data.getSource());
         Writer output = null;
         try {
             File file = skippedItemsLog.getFile();
@@ -138,6 +144,8 @@ public class MappingProcessor implements ItemProcessor<InputData, OutputData> {
                 } catch (IOException ioe) {
                     ioe.printStackTrace();
                 }
+            skippedLines++;
+            logger.warning( skippedLines + " form " + processedLines + " skipped. Last skipped line: " + data.getSource());
         }
 
     }

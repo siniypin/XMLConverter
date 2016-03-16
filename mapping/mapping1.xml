@@ -48,11 +48,11 @@
      -->
 
 
-    <!--bean id="xml2csv" class="com.piskunov.xmlconverter.JobWrapper">
+    <bean id="xml2csv" class="com.piskunov.xmlconverter.JobWrapper">
         <property name="dataMapping" ref="xml2csvDM"/>
         <property name="partnerID" value="123"/>
         <property name="sessionName" value="XML to CSV Test"/>
-
+        <property name="active" value="false"/>
     </bean>
 
 
@@ -241,7 +241,7 @@
                 </bean>
             </list>
         </property>
-    </bean-->
+    </bean>
 
 
 
