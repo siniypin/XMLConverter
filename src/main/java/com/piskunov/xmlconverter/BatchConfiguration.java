@@ -1,10 +1,11 @@
 package com.piskunov.xmlconverter;
 
-import com.piskunov.xmlconverter.mapping.InputData;
 import com.piskunov.xmlconverter.mapping.DataMapping;
+import com.piskunov.xmlconverter.mapping.InputData;
 import com.piskunov.xmlconverter.mapping.MappingProcessor;
-import com.piskunov.xmlconverter.mapping.adapters.MappingAdapter;
-import com.piskunov.xmlconverter.xmlprocessing.XMLUnmarshaller;
+import com.piskunov.xmlconverter.mapping.OutputData;
+import com.piskunov.xmlconverter.unmarshal.CSVLineMapper;
+import com.piskunov.xmlconverter.unmarshal.XMLUnmarshaller;
 import com.thoughtworks.xstream.converters.Converter;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -12,18 +13,25 @@ import org.springframework.batch.core.configuration.annotation.EnableBatchProces
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
+import org.springframework.batch.item.ItemReader;
+import org.springframework.batch.item.ItemWriter;
+import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.FlatFileItemWriter;
+import org.springframework.batch.item.file.LineMapper;
 import org.springframework.batch.item.file.MultiResourceItemReader;
+import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
+import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor;
 import org.springframework.batch.item.file.transform.DelimitedLineAggregator;
+import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
 import org.springframework.batch.item.xml.StaxEventItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.context.annotation.Scope;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.io.support.ResourcePatternUtils;
 import org.springframework.oxm.Unmarshaller;
@@ -31,7 +39,6 @@ import org.springframework.oxm.xstream.XStreamMarshaller;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.logging.Logger;
 
 /**
  * Created by Vladimir Piskunov on 2/27/16.
@@ -39,7 +46,7 @@ import java.util.logging.Logger;
 
 @Configuration
 @EnableBatchProcessing
-@ImportResource("file:mapping/mapping.xml")
+@ImportResource("file:mapping/*.xml")
 
 public class BatchConfiguration {
 
@@ -49,21 +56,16 @@ public class BatchConfiguration {
     @Autowired
     public StepBuilderFactory stepBuilderFactory;
 
-    @Autowired
-    public ResourceLoader resourceLoader;
-
     @Bean
-    public MultiResourceItemReader multiResourceItemReader(StaxEventItemReader<InputData> xmlReader) throws IOException {
+    public MultiResourceItemReader dataSourceReader() throws IOException {
         MultiResourceItemReader mReader = new MultiResourceItemReader();
-        mReader.setResources(ResourcePatternUtils.getResourcePatternResolver(resourceLoader).getResources("file:xml/*.xml"));
-        mReader.setDelegate(xmlReader);
         return mReader;
     }
 
 
     @Bean
     public StaxEventItemReader<InputData> xmlReader(Unmarshaller unmarshaller) {
-        StaxEventItemReader<InputData> reader = new StaxEventItemReader<InputData>();
+        StaxEventItemReader<InputData> reader = new StaxEventItemReader<>();
         reader.setFragmentRootElementName("product");
         reader.setUnmarshaller(unmarshaller);
         return reader;
@@ -86,13 +88,12 @@ public class BatchConfiguration {
     }
 
     @Bean
-    public FlatFileItemWriter<DataMapping> csvWriter() {
-        FlatFileItemWriter<DataMapping> writer = new FlatFileItemWriter<>();
-        writer.setResource(new FileSystemResource("cvs/report.csv"));
+    public FlatFileItemWriter<OutputData> csvWriter() {
+        FlatFileItemWriter<OutputData> writer = new FlatFileItemWriter<>();
         writer.setShouldDeleteIfExists(true);
-        BeanWrapperFieldExtractor<DataMapping> beanWrapperFieldExtractor = new BeanWrapperFieldExtractor<>();
+        BeanWrapperFieldExtractor<OutputData> beanWrapperFieldExtractor = new BeanWrapperFieldExtractor<>();
         beanWrapperFieldExtractor.setNames(new String[]{"result"});
-        DelimitedLineAggregator<DataMapping> delimitedLineAggregator = new DelimitedLineAggregator<>();
+        DelimitedLineAggregator<OutputData> delimitedLineAggregator = new DelimitedLineAggregator<>();
         delimitedLineAggregator.setDelimiter(",");
         delimitedLineAggregator.setFieldExtractor(beanWrapperFieldExtractor);
         writer.setLineAggregator(delimitedLineAggregator);
@@ -100,30 +101,44 @@ public class BatchConfiguration {
     }
 
     @Bean
-    public MappingProcessor processor() {
-        MappingProcessor processor =  new MappingProcessor();
-        processor.setSkippedItemsLog(new FileSystemResource("logs/failedRecords.log"));
-        return processor;
+    public FlatFileItemReader<InputData> csvReader(LineMapper lineMapper) {
+        FlatFileItemReader<InputData> reader = new FlatFileItemReader<>();
+        reader.setLineMapper(lineMapper);
+        return reader;
     }
 
     @Bean
-    public Job xml2csvJob(Step xml2csvJobStep) throws IOException {
-        return jobBuilderFactory.get("xml2csvJob")
+    public CSVLineMapper lineMapper(){
+        return new CSVLineMapper();
+    }
+
+
+    @Bean
+    public MappingProcessor processor() {
+        return new MappingProcessor();
+    }
+
+    @Bean
+    public Job job(Step step) throws IOException {
+        return jobBuilderFactory.get("Job")
                 .incrementer(new RunIdIncrementer())
-                .flow(xml2csvJobStep)
+                .flow(step)
                 .end()
                 .build();
     }
 
     @Bean
-    public Step xml2csvJobStep(MappingProcessor processor, FlatFileItemWriter<DataMapping> csvWriter, MultiResourceItemReader multiResourceItemReader) throws IOException {
-        return stepBuilderFactory.get("xml2csvJobStep")
-                .<InputData, DataMapping> chunk(1)
-                .reader(multiResourceItemReader)
+    public Step Step(MappingProcessor processor, ItemWriter<OutputData> csvWriter, ItemReader dataSourceReader) throws IOException {
+        return stepBuilderFactory.get("Step")
+                .allowStartIfComplete(true)
+                .<InputData, OutputData> chunk(1)
+                .reader(dataSourceReader)
                 .processor(processor)
                 .writer(csvWriter)
                 .build();
     }
+
+
 
 
 }

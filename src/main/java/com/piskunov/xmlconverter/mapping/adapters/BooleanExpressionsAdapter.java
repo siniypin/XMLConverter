@@ -9,25 +9,36 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.logging.Logger;
 
 /**
  * Created by Vladimir Piskunov on 2/28/16.
  */
 public class BooleanExpressionsAdapter implements MappingAdapter {
 
+    static Logger logger = Logger.getLogger(BooleanExpressionsAdapter.class.getName());
+
+
+    private String expression;
+
+    public String getExpression() {
+        return expression;
+    }
+
+    public void setExpression(String expression) {
+        this.expression = expression;
+    }
+
+
     @Override
     public List<String> process(MappingRule rule, InputData data) throws MappingException {
 
         List<String> resultValues = new ArrayList<>();
 
-        String args = rule.getAdapterAgrs();
+        if(expression == null)
+            throw new MappingException(this.getClass().getSimpleName() + "Adapter Expression is not set for rule: " + rule.getTarget());
 
-        if(args == null)
-            throw new MappingException(this.getClass().getSimpleName() + " args not set for rule: " + rule.getTarget());
-
-        String[] arguments = args.split(" ");
+        String[] arguments = expression.split(" ");
 
         for (String s : arguments) {
 
@@ -39,10 +50,17 @@ public class BooleanExpressionsAdapter implements MappingAdapter {
 
                     try {
                         Float.parseFloat(value);
-                        args = args.replace(s, value);
+                        expression = expression.replace(s, value);
 
                     } catch (NumberFormatException e) {
-                        throw new MappingException(this.getClass().getSimpleName() + " argument " + s.toUpperCase() + " is not a float/int: " + value );
+                        try {
+                            value = value.replace(",", ".");
+                            Float.parseFloat(value);
+                            expression = expression.replace(s, value);
+
+                        } catch (NumberFormatException ee) {
+                            throw new MappingException(this.getClass().getSimpleName() + " argument " + s.toUpperCase() + " is not a float/int: |" + value + "|");
+                        }
                     }
 
                 } else {
@@ -50,15 +68,15 @@ public class BooleanExpressionsAdapter implements MappingAdapter {
                 }
 
             } else if (s.equals("less")) {
-                args = args.replace("less", "<");
+                expression = expression.replace("less", "<");
             } else if (s.equals("more")) {
-                args = args.replace("more", ">");
+                expression = expression.replace("more", ">");
             }
 
         }
 
         ExpressionParser parser = new SpelExpressionParser();
-        Expression exp = parser.parseExpression(args);
+        Expression exp = parser.parseExpression(expression);
 
         resultValues.add(String.valueOf(exp.getValue(Boolean.class)));
 

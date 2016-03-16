@@ -12,6 +12,12 @@ public class MappingException extends Exception {
 
     public MappingException(MappingRule rule, String msg) {
 
-        this("Mapping error: " + msg + " Target field: " + rule.getTarget() + " Source field: " + rule.getSource());
+        this(rule, msg, null);
+    }
+
+    public MappingException(MappingRule rule, String msg, InputData data) {
+
+        this("Mapping error: " + msg + " TargetField: " + rule.getTarget() + " SourceField: " + rule.getSource() +
+                (data == null ? "" : " SourceValue: " + data.getPairs().get(rule.getSource())));
     }
 }

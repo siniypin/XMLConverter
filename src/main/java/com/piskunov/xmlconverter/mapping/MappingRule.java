@@ -27,10 +27,8 @@ public class MappingRule {
 
     //custom adapter
     private MappingAdapter adapter;
-    private String adapterAgrs;
 
     private boolean skipRecordOnError = false;
-
 
     public String getSource() {
         return source;
@@ -86,14 +84,6 @@ public class MappingRule {
 
     public void setAdapter(MappingAdapter adapter) {
         this.adapter = adapter;
-    }
-
-    public String getAdapterAgrs() {
-        return adapterAgrs;
-    }
-
-    public void setAdapterAgrs(String adapterAgrs) {
-        this.adapterAgrs = adapterAgrs;
     }
 
     public boolean isSkipRecordOnError() {

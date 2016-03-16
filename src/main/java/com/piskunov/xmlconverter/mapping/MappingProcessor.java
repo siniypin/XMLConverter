@@ -2,14 +2,11 @@ package com.piskunov.xmlconverter.mapping;
 
 
 import org.springframework.batch.item.ItemProcessor;
-import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -19,16 +16,15 @@ import java.util.logging.Logger;
  */
 
 
-public class MappingProcessor implements ItemProcessor<InputData, DataMapping> {
+public class MappingProcessor implements ItemProcessor<InputData, OutputData> {
 
-    Logger logger = Logger.getLogger(this.getClass().getName());
+    private static Logger logger = Logger.getLogger(MappingProcessor.class.getName());
 
-    @Autowired
     private DataMapping dataMapping;
 
-    private boolean validated = false;
-
     private Resource skippedItemsLog;
+
+    private boolean printHeaders = true;
 
     public Resource getSkippedItemsLog() {
         return skippedItemsLog;
@@ -38,14 +34,32 @@ public class MappingProcessor implements ItemProcessor<InputData, DataMapping> {
         this.skippedItemsLog = skippedItemsLog;
     }
 
-    @Override
-    public DataMapping process(InputData data) throws Exception {
+    public DataMapping getDataMapping() {
+        return dataMapping;
+    }
 
-        if (!validated) {
-            validateMappingRules();
-        }
+    public void setDataMapping(DataMapping dataMapping) {
+        this.dataMapping = dataMapping;
+    }
+
+    public boolean isPrintHeaders() {
+        return printHeaders;
+    }
+
+    public void setPrintHeaders(boolean printHeaders) {
+        this.printHeaders = printHeaders;
+    }
+
+    @Override
+    public OutputData process(InputData data) throws Exception {
 
         List<String> resultLines = new LinkedList<>();
+
+        //add headers
+        if(data.getSource() == null && printHeaders) {
+            return new OutputData(dataMapping.getHeaders());
+        }
+
         resultLines.add("");
 
         //iterator over mapping rules
@@ -99,9 +113,8 @@ public class MappingProcessor implements ItemProcessor<InputData, DataMapping> {
             ret += line + "\n";
         }
         ret = ret.substring(0, ret.length() - 1);
-        dataMapping.setResult(ret);
 
-        return dataMapping;
+        return new OutputData(ret);
     }
 
     private void logSkippedRecord(InputData data) {
@@ -160,13 +173,13 @@ public class MappingProcessor implements ItemProcessor<InputData, DataMapping> {
 
         //check required rule
         if (rule.isRequired() && resultValues.size() == 0) {
-            throw new MappingException(rule, "Not empty value is required.");
+            throw new MappingException(rule, "Not empty value is required.", data);
         }
 
         for (String result : resultValues) {
 
             if (rule.isRequired() && result.length() == 0) {
-                throw new MappingException(rule, "Not empty value is required.");
+                throw new MappingException(rule, "Not empty value is required.", data);
             }
 
             //check equal rule
@@ -201,19 +214,6 @@ public class MappingProcessor implements ItemProcessor<InputData, DataMapping> {
         }
 
         return resultValues;
-    }
-
-    private void validateMappingRules() {
-
-        for (MappingRule rule : dataMapping.getRules()) {
-
-            if (rule.getSource() == null && rule.getAdapter() == null) {
-                logger.warning("Mapping rule for target field " + rule.getTarget().toUpperCase() + " is incorrect: neither SOURCE nor ADAPTER is specified.");
-            }
-
-        }
-
-        validated = true;
     }
 
 

@@ -12,6 +12,27 @@ import java.util.List;
  */
 public class CategoryAdapter implements MappingAdapter {
 
+    private Dictionary categoryDictionary;
+    private Dictionary nameDictionary;
+    private String categorySource;
+    private String nameSource;
+
+    public String getCategorySource() {
+        return categorySource;
+    }
+
+    public void setCategorySource(String categorySource) {
+        this.categorySource = categorySource;
+    }
+
+    public String getNameSource() {
+        return nameSource;
+    }
+
+    public void setNameSource(String nameSource) {
+        this.nameSource = nameSource;
+    }
+
     public Dictionary getCategoryDictionary() {
         return categoryDictionary;
     }
@@ -28,9 +49,6 @@ public class CategoryAdapter implements MappingAdapter {
         this.nameDictionary = nameDictionary;
     }
 
-    private Dictionary categoryDictionary;
-    private Dictionary nameDictionary;
-
     @Override
     public List<String> process(MappingRule rule, InputData data) throws MappingException {
 
@@ -38,13 +56,13 @@ public class CategoryAdapter implements MappingAdapter {
             throw new MappingException(this.getClass().getSimpleName() + ": Category dictionary not set");
         }
 
-        String key = data.getPairs().get(rule.getSource());
+        String key = data.getPairs().get(categorySource);
         List<String> resultValues = categoryDictionary.search(key, false);
 
         if(resultValues.size() != 0 || nameDictionary == null) {
             return resultValues;
         }
 
-        return nameDictionary.search(data.getPairs().get(rule.getAdapterAgrs()), true);
+        return nameDictionary.search(data.getPairs().get(nameSource), true);
     }
 }
