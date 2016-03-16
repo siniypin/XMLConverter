@@ -46,13 +46,20 @@
      output files: output
      log files: logs
      -->
-
+    <bean id="sessionParametersXML2CSV" class="com.piskunov.xmlconverter.SessionParameters">
+        <property name="parameters">
+            <map>
+                <entry key="partner_id" value="123" />
+                <entry key="cpc_bid" value="111" />
+                <entry key="sessionName" value="Test Hoeffner Data Mapping" />
+            </map>
+        </property>
+    </bean>
 
     <bean id="xml2csv" class="com.piskunov.xmlconverter.JobWrapper">
         <property name="dataMapping" ref="xml2csvDM"/>
-        <property name="partnerID" value="123"/>
-        <property name="sessionName" value="XML to CSV Test"/>
         <property name="active" value="false"/>
+        <property name="sessionName" value="#{sessionParametersXML2CSV.getProperty('sessionName')}"/>
     </bean>
 
 
@@ -179,6 +186,11 @@
 
                 <bean class="com.piskunov.xmlconverter.mapping.MappingRule">
                     <property name="target" value="cpc_bid"/>
+                    <property name="adapter">
+                        <bean class="com.piskunov.xmlconverter.mapping.adapters.SimpleValueAdapter">
+                            <property name="value" value="#{sessionParametersCSV2CSV.getProperty('cpc_bid')}"/>
+                        </bean>
+                    </property>
                 </bean>
 
                 <bean class="com.piskunov.xmlconverter.mapping.MappingRule">
@@ -189,7 +201,7 @@
                     <property name="target" value="partner_id"/>
                     <property name="adapter">
                         <bean class="com.piskunov.xmlconverter.mapping.adapters.SimpleValueAdapter">
-                            <property name="value" value="#{xml2csv.partnerID}"/>
+                            <property name="value" value="#{sessionParametersCSV2CSV.getProperty('partner_id')}"/>
                         </bean>
                     </property>
                 </bean>
@@ -198,7 +210,7 @@
                     <property name="target" value="uid"/>
                     <property name="adapter">
                         <bean class="com.piskunov.xmlconverter.mapping.adapters.UUIDGeneratorAdapter">
-                            <property name="baseValue" value="#{xml2csv.partnerID}"/>
+                            <property name="baseValue" value="#{sessionParametersCSV2CSV.getProperty('partner_id')}"/>
                             <property name="baseSources">
                                 <list>
                                     <value>color</value>
