@@ -1,4 +1,4 @@
-package com.piskunov.xmlconverter.xmlprocessing;
+package com.piskunov.xmlconverter.unmarshal;
 
 import com.piskunov.xmlconverter.mapping.InputData;
 import com.thoughtworks.xstream.converters.Converter;
@@ -19,7 +19,7 @@ public class XMLUnmarshaller implements Converter {
     }
 
     @Override
-    public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext unmarshallingContext) {
+    public InputData unmarshal(HierarchicalStreamReader reader, UnmarshallingContext unmarshallingContext) {
 
         InputData obj = new InputData();
 
