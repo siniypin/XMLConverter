@@ -69,8 +69,8 @@
     <bean id="sessionParametersCSV2CSV" class="com.piskunov.xmlconverter.SessionParameters">
         <property name="parameters">
             <map>
-                <entry key="partner_id" value="123" />
-                <entry key="cpc_bid" value="111" />
+                <entry key="partner_id" value="1" />
+                <entry key="cpc_mm" value="10000" />
                 <entry key="sessionName" value="Test Hoeffner Data Mapping" />
             </map>
         </property>
@@ -203,10 +203,10 @@
                 </bean>
 
                 <bean class="com.piskunov.xmlconverter.mapping.MappingRule">
-                    <property name="target" value="cpc_bid"/>
+                    <property name="target" value="cpc_mm"/>
                     <property name="adapter">
                         <bean class="com.piskunov.xmlconverter.mapping.adapters.SimpleValueAdapter">
-                            <property name="value" value="#{sessionParametersCSV2CSV.getProperty('cpc_bid')}"/>
+                            <property name="value" value="#{sessionParametersCSV2CSV.getProperty('cpc_mm')}"/>
                         </bean>
                     </property>
                 </bean>
