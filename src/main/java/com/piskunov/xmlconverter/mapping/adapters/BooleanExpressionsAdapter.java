@@ -35,10 +35,12 @@ public class BooleanExpressionsAdapter implements MappingAdapter {
 
         List<String> resultValues = new ArrayList<>();
 
-        if(expression == null)
+        String exp = expression;
+
+        if(exp == null)
             throw new MappingException(this.getClass().getSimpleName() + "Adapter Expression is not set for rule: " + rule.getTarget());
 
-        String[] arguments = expression.split(" ");
+        String[] arguments = exp.split(" ");
 
         for (String s : arguments) {
 
@@ -50,13 +52,13 @@ public class BooleanExpressionsAdapter implements MappingAdapter {
 
                     try {
                         Float.parseFloat(value);
-                        expression = expression.replace(s, value);
+                        exp = exp.replace(s, value);
 
                     } catch (NumberFormatException e) {
                         try {
                             value = value.replace(",", ".");
                             Float.parseFloat(value);
-                            expression = expression.replace(s, value);
+                            exp = exp.replace(s, value);
 
                         } catch (NumberFormatException ee) {
                             throw new MappingException(this.getClass().getSimpleName() + " argument " + s.toUpperCase() + " is not a float/int: |" + value + "|");
@@ -68,17 +70,15 @@ public class BooleanExpressionsAdapter implements MappingAdapter {
                 }
 
             } else if (s.equals("less")) {
-                expression = expression.replace("less", "<");
+                exp = exp.replace("less", "<");
             } else if (s.equals("more")) {
-                expression = expression.replace("more", ">");
+                exp = exp.replace("more", ">");
             }
 
         }
 
         ExpressionParser parser = new SpelExpressionParser();
-        Expression exp = parser.parseExpression(expression);
-
-        resultValues.add(String.valueOf(exp.getValue(Boolean.class)));
+        resultValues.add(String.valueOf(parser.parseExpression(exp).getValue(Boolean.class)));
 
         return resultValues;
 

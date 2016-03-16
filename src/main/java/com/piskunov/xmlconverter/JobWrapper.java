@@ -61,7 +61,6 @@ public class JobWrapper {
 
     private String outputFileName = "report";
     private String inputCSVDelimiter = ",";
-    private String partnerID;
     private String sessionName;
 
     public boolean isActive() {
@@ -78,14 +77,6 @@ public class JobWrapper {
 
     public void setSessionName(String sessionName) {
         this.sessionName = sessionName;
-    }
-
-    public String getPartnerID() {
-        return partnerID;
-    }
-
-    public void setPartnerID(String partnerID) {
-        this.partnerID = partnerID;
     }
 
     public String getInputDataType() {
