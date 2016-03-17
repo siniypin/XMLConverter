@@ -84,6 +84,7 @@
     </bean>
 
     <bean id="csv2csvDM" class="com.piskunov.xmlconverter.mapping.DataMapping">
+        <property name="delimiter" value=";"/>
         <property name="rules">
             <list>
                 <bean class="com.piskunov.xmlconverter.mapping.MappingRule">
