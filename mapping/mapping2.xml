@@ -245,6 +245,7 @@
                                 <list>
                                     <value>NAME</value>
                                     <value>COLOR</value>
+                                    <value>SKU</value>
                                 </list>
                             </property>
                         </bean>
