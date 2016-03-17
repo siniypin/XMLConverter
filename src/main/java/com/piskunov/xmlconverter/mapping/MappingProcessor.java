@@ -86,7 +86,7 @@ public class MappingProcessor implements ItemProcessor<InputData, OutputData> {
                 for (String fieldMappingValue : fieldMappingValues) {
 
                     for (String line : resultLines) {
-                        line += "\"" + fieldMappingValue + "\"" + dataMapping.getDelimiter();
+                        line += fieldMappingValue + dataMapping.getDelimiter();
                         tmpLines.add(line);
                     }
                 }
