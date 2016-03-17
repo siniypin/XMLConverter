@@ -8,29 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Vladimir Piskunov on 2/29/16.
+ * Created by Vladimir Piskunov on 3/17/16.
  */
-public class DimensionAdapter implements MappingAdapter {
+public class PriceAdapter implements MappingAdapter {
 
-    private String delimiter;
-    private int position;
     private String source;
-
-    public String getDelimiter() {
-        return delimiter;
-    }
-
-    public void setDelimiter(String delimiter) {
-        this.delimiter = delimiter;
-    }
-
-    public int getPosition() {
-        return position;
-    }
-
-    public void setPosition(int position) {
-        this.position = position;
-    }
 
     public String getSource() {
         return source;
@@ -51,19 +33,15 @@ public class DimensionAdapter implements MappingAdapter {
             throw new MappingException(this.getClass().getSimpleName() + ": Source not found: " + source);
         }
 
-        String[] values = sourceValue.split(delimiter);
-
-        if(values.length > position) {
-
-            String stringValue = values[position];
+        if(sourceValue != null) {
 
             int intValue;
 
             try {
-                stringValue = stringValue.replace(",", ".");
-                intValue = Math.round(Float.valueOf(stringValue) * 10);
+                sourceValue = sourceValue.replace(",", ".");
+                intValue = Math.round(Float.valueOf(sourceValue) * 100);
             } catch(NumberFormatException e) {
-                throw new MappingException(this.getClass().getSimpleName() + ": Dimentions format is incorrect: " +  sourceValue);
+                throw new MappingException(this.getClass().getSimpleName() + ": Price format is incorrect: " +  sourceValue);
             }
 
             resultValues.add(String.valueOf(intValue));

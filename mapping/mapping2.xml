@@ -112,14 +112,22 @@
 
                 <bean class="com.piskunov.xmlconverter.mapping.MappingRule">
                     <property name="target" value="price"/>
-                    <property name="source" value="PRICE"/>
+                    <property name="adapter">
+                        <bean class="com.piskunov.xmlconverter.mapping.adapters.PriceAdapter">
+                            <property name="source" value="PRICE"/>
+                        </bean>
+                    </property>
                     <property name="required" value="true"/>
                     <property name="skipRecordOnError" value="true"/>
                 </bean>
 
                 <bean class="com.piskunov.xmlconverter.mapping.MappingRule">
                     <property name="target" value="alter_price"/>
-                    <property name="source" value="ALTER_PRICE"/>
+                    <property name="adapter">
+                        <bean class="com.piskunov.xmlconverter.mapping.adapters.PriceAdapter">
+                            <property name="source" value="ALTER_PRICE"/>
+                        </bean>
+                    </property>
                 </bean>
 
                 <bean class="com.piskunov.xmlconverter.mapping.MappingRule">
@@ -131,7 +139,11 @@
 
                 <bean class="com.piskunov.xmlconverter.mapping.MappingRule">
                     <property name="target" value="delivery_price"/>
-                    <property name="source" value="DELIVERY_PRICE"/>
+                    <property name="adapter">
+                        <bean class="com.piskunov.xmlconverter.mapping.adapters.PriceAdapter">
+                            <property name="source" value="DELIVERY_PRICE"/>
+                        </bean>
+                    </property>
                 </bean>
 
                 <bean class="com.piskunov.xmlconverter.mapping.MappingRule">
@@ -169,36 +181,34 @@
 
                 <bean class="com.piskunov.xmlconverter.mapping.MappingRule">
                     <property name="target" value="width"/>
-                    <property name="source" value="DIMENSIONS"/>
                     <property name="adapter">
                         <bean class="com.piskunov.xmlconverter.mapping.adapters.DimensionAdapter">
                             <property name="delimiter" value="x"/>
                             <property name="position" value="0"/>
-                            <property name="removeDelimiter" value="true"/>
+                            <property name="source" value="DIMENSIONS"/>
                         </bean>
                     </property>
                 </bean>
 
                 <bean class="com.piskunov.xmlconverter.mapping.MappingRule">
                     <property name="target" value="height"/>
-                    <property name="source" value="DIMENSIONS"/>
                     <property name="adapter">
                         <bean class="com.piskunov.xmlconverter.mapping.adapters.DimensionAdapter">
                             <property name="delimiter" value="x"/>
                             <property name="position" value="1"/>
-                            <property name="removeDelimiter" value="true"/>
+                            <property name="source" value="DIMENSIONS"/>
                         </bean>
                     </property>
                 </bean>
 
                 <bean class="com.piskunov.xmlconverter.mapping.MappingRule">
                     <property name="target" value="depth"/>
-                    <property name="source" value="DIMENSIONS"/>
+
                     <property name="adapter">
                         <bean class="com.piskunov.xmlconverter.mapping.adapters.DimensionAdapter">
                             <property name="delimiter" value="x"/>
                             <property name="position" value="2"/>
-                            <property name="removeDelimiter" value="true"/>
+                            <property name="source" value="DIMENSIONS"/>
                         </bean>
                     </property>
                 </bean>
