@@ -75,7 +75,7 @@ public class MappingStatistics {
             logger.info("Target " + entry.getKey().toUpperCase() + " failed " + entry.getValue() + " times.");
         }
         logger.info("----------------------------------");
-        logger.info("Failed mapping rules with ERROR^ item skipped: ");
+        logger.info("Failed mapping rules with ERROR, item skipped: ");
         logger.info("----------------------------------");
         for(Map.Entry<String, Integer> entry : failedWithErrorRules.entrySet()){
             logger.info("Target " + entry.getKey().toUpperCase() + " failed " + entry.getValue() + " times.");

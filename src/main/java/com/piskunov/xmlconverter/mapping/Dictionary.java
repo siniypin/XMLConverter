@@ -12,10 +12,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -25,7 +22,7 @@ import java.util.stream.Stream;
  */
 public class Dictionary {
 
-    private Map<String, String> dictionary = new HashMap<>();
+    private Map<String, List<String>> dictionary = new HashMap<>();
 
     private Resource dictionaryFile;
 
@@ -39,29 +36,54 @@ public class Dictionary {
 
     @PostConstruct
     public void init() throws Exception {
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(dictionaryFile.getInputStream()))) {
 
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] values = line.split(",");
-                if (values.length > 1) {
-                    dictionary.put(values[0], values[1]);
-                }
+        Scanner scanner = new Scanner(dictionaryFile.getFile());
+     //   scanner.useDelimiter("\n");
+
+        while (scanner.hasNextLine()) {
+
+            Scanner lineScanner  = new Scanner(scanner.nextLine());
+            lineScanner.useDelimiter(",");
+
+            String key = null;
+            ArrayList<String> values = new ArrayList<>();
+
+            if(lineScanner.hasNext())
+                key = lineScanner.next();
+
+            while (lineScanner.hasNext()){
+                values.add(lineScanner.next());
+            }
+
+            if(key == null || values.size() == 0)
+                continue;
+
+            List<String> currentValues = dictionary.get(key);
+
+            if(currentValues != null){
+                currentValues.addAll(values);
+                dictionary.put(key, currentValues);
+            } else {
+                dictionary.put(key, values);
             }
         }
+
     }
 
     public List<String> search(String key, boolean searchByRegExp) {
 
         ArrayList<String> ret = new ArrayList<>();
 
-        if(key == null)
+        if (key == null)
             return ret;
 
+        if(!searchByRegExp) {
+            return dictionary.get(key);
+        }
+
         for (String dictionaryKey : dictionary.keySet()) {
-            if ((searchByRegExp && key.matches(dictionaryKey))
-                    || (!searchByRegExp && key.equals(dictionaryKey))) {
-                ret.add(dictionary.get(dictionaryKey));
+            if (key.matches(dictionaryKey)) {
+                ret.addAll(dictionary.get(dictionaryKey));
             }
         }
         return ret;

@@ -5,6 +5,7 @@ import com.piskunov.xmlconverter.mapping.InputData;
 import com.piskunov.xmlconverter.mapping.MappingException;
 import com.piskunov.xmlconverter.mapping.MappingRule;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -59,7 +60,11 @@ public class CategoryAdapter extends BaseMappingAdapter {
         String key = data.getPairs().get(categorySource);
         List<String> resultValues = categoryDictionary.search(key, false);
 
-        if(resultValues.size() != 0 || nameDictionary == null) {
+        if(resultValues == null && nameDictionary == null){
+            return new ArrayList<>();
+        }
+
+        if((resultValues.size() != 0 || nameDictionary == null)) {
             return resultValues;
         }
 

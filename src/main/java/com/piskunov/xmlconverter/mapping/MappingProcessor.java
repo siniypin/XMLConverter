@@ -111,6 +111,9 @@ public class MappingProcessor implements ItemProcessor<InputData, OutputData> {
 
 
         //make ret value: remove last delimiter, add line separator
+
+        mappingStatistics.increaseMultipliedItems(resultLines.size() - 1);
+
         String ret = "";
 
         for (String line : resultLines) {
