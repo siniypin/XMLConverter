@@ -69,13 +69,13 @@ public class MappingStatistics {
         logger.info("Skipped Items: " + skippedItems);
         logger.info("One-to-Many Items: " + multipliedItems);
         logger.info("----------------------------------");
-        logger.info("Failed mapping rules with WARNING: ");
+        logger.info("Failed mapping rules with WARNING, ignored: ");
         logger.info("----------------------------------");
         for(Map.Entry<String, Integer> entry : failedWithWarningsRules.entrySet()){
             logger.info("Target " + entry.getKey().toUpperCase() + " failed " + entry.getValue() + " times.");
         }
         logger.info("----------------------------------");
-        logger.info("Failed mapping rules with ERROR: ");
+        logger.info("Failed mapping rules with ERROR^ item skipped: ");
         logger.info("----------------------------------");
         for(Map.Entry<String, Integer> entry : failedWithErrorRules.entrySet()){
             logger.info("Target " + entry.getKey().toUpperCase() + " failed " + entry.getValue() + " times.");
