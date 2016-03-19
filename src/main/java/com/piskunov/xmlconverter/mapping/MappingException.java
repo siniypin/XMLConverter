@@ -5,19 +5,28 @@ package com.piskunov.xmlconverter.mapping;
  */
 public class MappingException extends Exception {
 
+    private static int nextID = 0;
+
+    private static int getNextID(){
+        return nextID++;
+    }
+
+    private static int getID(){
+        return nextID;
+    }
+
+    private int errorID;
 
     public MappingException(String s) {
         super(s);
+        errorID = getNextID();
     }
 
     public MappingException(MappingRule rule, String msg) {
-
-        this(rule, msg, null);
+        this("Mapping error: " + msg + " ID" + getID() + " TargetField: " + rule.getTarget() + " Source: " + rule.getSource() + " Adapter: " + rule.getAdapter().getClass().getSimpleName());
     }
 
-    public MappingException(MappingRule rule, String msg, InputData data) {
-
-        this("Mapping error: " + msg + " TargetField: " + rule.getTarget() + " SourceField: " + rule.getSource() +
-                (data == null ? "" : " SourceValue: " + data.getPairs().get(rule.getSource())));
+    public int getErrorID() {
+        return errorID;
     }
 }

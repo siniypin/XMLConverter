@@ -14,4 +14,7 @@ public interface MappingAdapter {
 
     public List<String> process(MappingRule rule, InputData data) throws MappingException;
 
+    public String getSource();
+    public void setSource(String source);
+
 }

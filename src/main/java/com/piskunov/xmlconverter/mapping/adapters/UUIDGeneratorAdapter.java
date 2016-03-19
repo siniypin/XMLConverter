@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 /**
  * Created by Vladimir Piskunov on 2/29/16.
  */
-public class UUIDGeneratorAdapter implements MappingAdapter {
+public class UUIDGeneratorAdapter extends BaseMappingAdapter {
 
     private String baseValue;
     private List<String>baseSources;
@@ -34,7 +34,7 @@ public class UUIDGeneratorAdapter implements MappingAdapter {
     }
 
     @Override
-    public List<String> process(MappingRule rule, InputData data) throws MappingException {
+    public List<String> processInternal(MappingRule rule, InputData data) throws MappingException {
 
         List<String> resultValues = new ArrayList<>();
         if(baseValue == null && baseSources == null)

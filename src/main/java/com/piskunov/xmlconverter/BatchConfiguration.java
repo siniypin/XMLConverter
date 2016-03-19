@@ -1,13 +1,11 @@
 package com.piskunov.xmlconverter;
 
-import com.piskunov.xmlconverter.mapping.DataMapping;
-import com.piskunov.xmlconverter.mapping.InputData;
-import com.piskunov.xmlconverter.mapping.MappingProcessor;
-import com.piskunov.xmlconverter.mapping.OutputData;
+import com.piskunov.xmlconverter.mapping.*;
 import com.piskunov.xmlconverter.unmarshal.CSVLineMapper;
 import com.piskunov.xmlconverter.unmarshal.XMLUnmarshaller;
 import com.thoughtworks.xstream.converters.Converter;
 import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -119,8 +117,8 @@ public class BatchConfiguration {
     }
 
     @Bean
-    public Job job(Step step) throws IOException {
-        return jobBuilderFactory.get("Job")
+    public Job job(Step step, JobCleanUpListener jobCleanUpListener) throws IOException {
+        return jobBuilderFactory.get("Job").listener(jobCleanUpListener)
                 .incrementer(new RunIdIncrementer())
                 .flow(step)
                 .end()
@@ -138,7 +136,14 @@ public class BatchConfiguration {
                 .build();
     }
 
+    @Bean
+    JobCleanUpListener jobCleanUpListener(){
+        return new JobCleanUpListener();
+    }
 
-
+    @Bean
+    MappingStatistics mappingStatistics(){
+        return new MappingStatistics();
+    }
 
 }

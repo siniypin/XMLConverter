@@ -11,21 +11,11 @@ import java.util.logging.Logger;
 /**
  * Created by Vladimir Piskunov on 2/29/16.
  */
-public class BooleanRegExpAdapter implements MappingAdapter {
+public class BooleanRegExpAdapter extends BaseMappingAdapter {
 
     static Logger logger = Logger.getLogger(BooleanExpressionsAdapter.class.getName());
 
     private String expression;
-    private String source;
-
-
-    public String getSource() {
-        return source;
-    }
-
-    public void setSource(String source) {
-        this.source = source;
-    }
 
     public String getExpression() {
         return expression;
@@ -37,7 +27,7 @@ public class BooleanRegExpAdapter implements MappingAdapter {
 
 
     @Override
-    public List<String> process(MappingRule rule, InputData data) throws MappingException {
+    public List<String> processInternal(MappingRule rule, InputData data) throws MappingException {
 
         List<String> resultValues = new ArrayList<>();
 
