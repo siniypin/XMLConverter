@@ -1,24 +1,15 @@
 package com.piskunov.xmlconverter.mapping;
 
-import org.springframework.batch.item.file.FlatFileItemReader;
-import org.springframework.batch.item.file.LineMapper;
-import org.springframework.core.io.Resource;
-
-import javax.annotation.PostConstruct;
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+import javax.annotation.PostConstruct;
+
+import org.springframework.core.io.Resource;
 
 /**
  * Created by Vladimir Piskunov on 3/11/16.

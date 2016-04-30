@@ -3,6 +3,7 @@ package com.piskunov.xmlconverter.mapping;
 /**
  * Created by Vladimir Piskunov on 2/28/16.
  */
+@SuppressWarnings("serial")
 public class MappingException extends Exception {
 
 

@@ -1,6 +1,5 @@
 package com.piskunov.xmlconverter;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**

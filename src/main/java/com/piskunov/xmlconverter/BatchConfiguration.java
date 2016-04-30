@@ -1,12 +1,8 @@
 package com.piskunov.xmlconverter;
 
-import com.piskunov.xmlconverter.mapping.DataMapping;
-import com.piskunov.xmlconverter.mapping.InputData;
-import com.piskunov.xmlconverter.mapping.MappingProcessor;
-import com.piskunov.xmlconverter.mapping.OutputData;
-import com.piskunov.xmlconverter.unmarshal.CSVLineMapper;
-import com.piskunov.xmlconverter.unmarshal.XMLUnmarshaller;
-import com.thoughtworks.xstream.converters.Converter;
+import java.io.IOException;
+import java.util.HashMap;
+
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -19,26 +15,22 @@ import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.FlatFileItemWriter;
 import org.springframework.batch.item.file.LineMapper;
 import org.springframework.batch.item.file.MultiResourceItemReader;
-import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
-import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor;
 import org.springframework.batch.item.file.transform.DelimitedLineAggregator;
-import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
 import org.springframework.batch.item.xml.StaxEventItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
-import org.springframework.context.annotation.Scope;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.ResourceLoader;
-import org.springframework.core.io.support.ResourcePatternUtils;
 import org.springframework.oxm.Unmarshaller;
 import org.springframework.oxm.xstream.XStreamMarshaller;
 
-import java.io.IOException;
-import java.util.HashMap;
+import com.piskunov.xmlconverter.mapping.InputData;
+import com.piskunov.xmlconverter.mapping.MappingProcessor;
+import com.piskunov.xmlconverter.mapping.OutputData;
+import com.piskunov.xmlconverter.unmarshal.CSVLineMapper;
+import com.piskunov.xmlconverter.unmarshal.XMLUnmarshaller;
+import com.thoughtworks.xstream.converters.Converter;
 
 /**
  * Created by Vladimir Piskunov on 2/27/16.

@@ -21,156 +21,155 @@ import java.util.Date;
  * Created by Vladimir Piskunov on 3/15/16.
  */
 
-
 public class JobWrapper {
 
-    @Autowired
-    Job job;
+	@Autowired
+	Job job;
 
-    @Autowired
-    MultiResourceItemReader dataSourceReader;
+	@Autowired
+	MultiResourceItemReader dataSourceReader;
 
-    @Autowired
-    public ResourceLoader resourceLoader;
+	@Autowired
+	public ResourceLoader resourceLoader;
 
-    @Autowired
-    StaxEventItemReader<InputData> xmlReader;
+	@Autowired
+	StaxEventItemReader<InputData> xmlReader;
 
-    @Autowired
-    FlatFileItemReader<InputData> csvReader;
+	@Autowired
+	FlatFileItemReader<InputData> csvReader;
 
-    @Autowired
-    FlatFileItemWriter<OutputData> csvWriter;
+	@Autowired
+	FlatFileItemWriter<OutputData> csvWriter;
 
-    @Autowired
-    MappingProcessor processor;
+	@Autowired
+	MappingProcessor processor;
 
-    @Autowired
-    CSVLineMapper lineMapper;
+	@Autowired
+	CSVLineMapper lineMapper;
 
-    public final String XML_TYPE = "xml";
-    public final String CSV_TYPE = "csv";
+	public final String XML_TYPE = "xml";
+	public final String CSV_TYPE = "csv";
 
-    private boolean active = true;
+	private boolean active = true;
 
-    private String inputDataType = XML_TYPE;
-    private String outputDataType = CSV_TYPE;
-    private String inputFolder = "input";
-    private String outputFolder = "output";
-    private DataMapping dataMapping;
+	private String inputDataType = XML_TYPE;
+	private String outputDataType = CSV_TYPE;
+	private String inputFolder = "input";
+	private String outputFolder = "output";
+	private DataMapping dataMapping;
 
-    private String outputFileName = "report";
-    private String inputCSVDelimiter = ",";
-    private String sessionName;
+	private String outputFileName = "report";
+	private String inputCSVDelimiter = ",";
+	private String sessionName;
 
-    public boolean isActive() {
-        return active;
-    }
+	public boolean isActive() {
+		return active;
+	}
 
-    public void setActive(boolean active) {
-        this.active = active;
-    }
+	public void setActive(boolean active) {
+		this.active = active;
+	}
 
-    public String getSessionName() {
-        return sessionName;
-    }
+	public String getSessionName() {
+		return sessionName;
+	}
 
-    public void setSessionName(String sessionName) {
-        this.sessionName = sessionName;
-    }
+	public void setSessionName(String sessionName) {
+		this.sessionName = sessionName;
+	}
 
-    public String getInputDataType() {
-        return inputDataType;
-    }
+	public String getInputDataType() {
+		return inputDataType;
+	}
 
-    public void setInputDataType(String inputDataType) {
-        this.inputDataType = inputDataType;
-    }
+	public void setInputDataType(String inputDataType) {
+		this.inputDataType = inputDataType;
+	}
 
-    public String getOutputDataType() {
-        return outputDataType;
-    }
+	public String getOutputDataType() {
+		return outputDataType;
+	}
 
-    public void setOutputDataType(String outputDataType) {
-        this.outputDataType = outputDataType;
-    }
+	public void setOutputDataType(String outputDataType) {
+		this.outputDataType = outputDataType;
+	}
 
-    public String getInputFolder() {
-        return inputFolder;
-    }
+	public String getInputFolder() {
+		return inputFolder;
+	}
 
-    public void setInputFolder(String inputFolder) {
-        this.inputFolder = inputFolder;
-    }
+	public void setInputFolder(String inputFolder) {
+		this.inputFolder = inputFolder;
+	}
 
-    public String getOutputFolder() {
-        return outputFolder;
-    }
+	public String getOutputFolder() {
+		return outputFolder;
+	}
 
-    public void setOutputFolder(String outputFolder) {
-        this.outputFolder = outputFolder;
-    }
+	public void setOutputFolder(String outputFolder) {
+		this.outputFolder = outputFolder;
+	}
 
-    public DataMapping getDataMapping() {
-        return dataMapping;
-    }
+	public DataMapping getDataMapping() {
+		return dataMapping;
+	}
 
-    public void setDataMapping(DataMapping dataMapping) {
-        this.dataMapping = dataMapping;
-    }
+	public void setDataMapping(DataMapping dataMapping) {
+		this.dataMapping = dataMapping;
+	}
 
-    public String getOutputFileName() {
-        return outputFileName;
-    }
+	public String getOutputFileName() {
+		return outputFileName;
+	}
 
-    public void setOutputFileName(String outputFileName) {
-        this.outputFileName = outputFileName;
-    }
+	public void setOutputFileName(String outputFileName) {
+		this.outputFileName = outputFileName;
+	}
 
-    public String getInputCSVDelimiter() {
-        return inputCSVDelimiter;
-    }
+	public String getInputCSVDelimiter() {
+		return inputCSVDelimiter;
+	}
 
-    public void setInputCSVDelimiter(String inputCSVDelimiter) {
-        this.inputCSVDelimiter = inputCSVDelimiter;
-    }
+	public void setInputCSVDelimiter(String inputCSVDelimiter) {
+		this.inputCSVDelimiter = inputCSVDelimiter;
+	}
 
+	public Job getJob() throws MappingException, IOException {
 
-    public Job getJob() throws MappingException, IOException {
+		if (!active) {
+			return null;
+		}
 
-        if(!active) {
-            return null;
-        }
+		if (dataMapping == null) {
+			throw new MappingException("Data Mapping is not set for JobConfigurator");
+		}
 
-        if(dataMapping == null) {
-            throw new MappingException("Data Mapping is not set for JobConfigurator");
-        }
+		processor.resetProcessor();
 
-        processor.resetProcessor();
+		SimpleDateFormat sdfDate = new SimpleDateFormat("yyyyMMddHHmmss");
+		Date now = new Date();
+		String fileBaseName = sessionName.replace(" ", "") + "_" + sdfDate.format(now);
 
-        SimpleDateFormat sdfDate = new SimpleDateFormat("MMddHHmmss");
-        Date now = new Date();
-        String fileBaseName = sdfDate.format(now);
+		dataSourceReader.setResources(ResourcePatternUtils.getResourcePatternResolver(resourceLoader)
+				.getResources("file:" + inputFolder + File.separator + "*." + inputDataType));
 
+		if (inputDataType.equals(XML_TYPE)) {
+			dataSourceReader.setDelegate(xmlReader);
+		} else if (inputDataType.equals(CSV_TYPE)) {
+			lineMapper.setDelimiter(inputCSVDelimiter);
+			dataSourceReader.setDelegate(csvReader);
+		}
 
-        dataSourceReader.setResources(ResourcePatternUtils.getResourcePatternResolver(resourceLoader).getResources("file:" + inputFolder + File.separator + "*." + inputDataType));
+		String baseFolder = File.separator + sessionName.replace(" ", "") + File.separator;
 
-        if(inputDataType.equals(XML_TYPE)) {
-            dataSourceReader.setDelegate(xmlReader);
-        } else if(inputDataType.equals(CSV_TYPE)) {
-            lineMapper.setDelimiter(inputCSVDelimiter);
-            dataSourceReader.setDelegate(csvReader);
-        }
+		if (outputDataType.equals(CSV_TYPE)) {
+			csvWriter.setResource(new FileSystemResource(
+					outputFolder + File.separator + fileBaseName + "_" + outputFileName + "." + outputDataType));
+		}
 
-        String baseFolder = File.separator + sessionName.replace(" ", "") + File.separator;
+		processor.setDataMapping(dataMapping);
+		processor.setSkippedItemsLog(new FileSystemResource("logs" + baseFolder + fileBaseName + "_skipped.log"));
 
-        if(outputDataType.equals(CSV_TYPE)) {
-            csvWriter.setResource(new FileSystemResource(outputFolder + baseFolder + fileBaseName + "_" + outputFileName + "." + outputDataType ));
-        }
-
-        processor.setDataMapping(dataMapping);
-        processor.setSkippedItemsLog(new FileSystemResource("logs" + baseFolder + fileBaseName + "_skipped.log"));
-
-        return job;
-    }
+		return job;
+	}
 }

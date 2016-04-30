@@ -1,15 +1,18 @@
 package com.piskunov.xmlconverter.mapping;
 
 
-import org.springframework.batch.item.ItemProcessor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
+
+import org.springframework.batch.item.ItemProcessor;
+import org.springframework.core.io.Resource;
 
 /**
  * Created by Vladimir Piskunov on 2/25/16.
