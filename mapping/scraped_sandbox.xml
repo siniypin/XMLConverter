@@ -45,6 +45,7 @@
 		<property name="dataMapping" ref="home24_2csvDM" />
 		<property name="inputDataType" value="csv" />
 		<property name="inputFolder" value="input/home24" />
+		<property name="outputFolder" value="output/sandbox" />
 		<property name="inputCSVDelimiter" value=";" />
 		<property name="sessionName"
 			value="#{home24ParametersCSV2CSV.getProperty('sessionName')}" />
@@ -54,6 +55,7 @@
 		<property name="dataMapping" ref="hoeffner2csvDM" />
 		<property name="inputDataType" value="csv" />
 		<property name="inputFolder" value="input/hoeffner" />
+		<property name="outputFolder" value="output/sandbox" />
 		<property name="inputCSVDelimiter" value=";" />
 		<property name="sessionName"
 			value="#{hoeffnerParametersCSV2CSV.getProperty('sessionName')}" />

@@ -21,7 +21,7 @@
 
 	<!-- Job definition defaults: xml to csv input files: input/*.xml output 
 		files: output log files: logs -->
-	<bean id="hoeffnerParametersCSV2CSV" class="com.piskunov.xmlconverter.SessionParameters">
+	<bean id="prod_hoeffnerParametersCSV2CSV" class="com.piskunov.xmlconverter.SessionParameters">
 		<property name="parameters">
 			<map>
 				<entry key="partner_id" value="1" />
@@ -31,7 +31,7 @@
 		</property>
 	</bean>
 
-	<bean id="home24ParametersCSV2CSV" class="com.piskunov.xmlconverter.SessionParameters">
+	<bean id="prod_home24ParametersCSV2CSV" class="com.piskunov.xmlconverter.SessionParameters">
 		<property name="parameters">
 			<map>
 				<entry key="partner_id" value="2" />
@@ -41,25 +41,27 @@
 		</property>
 	</bean>
 
-	<bean id="home24Converion" class="com.piskunov.xmlconverter.JobWrapper">
+	<bean id="prod_home24Converion" class="com.piskunov.xmlconverter.JobWrapper">
 		<property name="dataMapping" ref="home24_2csvDM" />
 		<property name="inputDataType" value="csv" />
 		<property name="inputFolder" value="input/home24" />
+		<property name="outputFolder" value="output/prod" />
 		<property name="inputCSVDelimiter" value=";" />
 		<property name="sessionName"
-			value="#{home24ParametersCSV2CSV.getProperty('sessionName')}" />
+			value="#{prod_home24ParametersCSV2CSV.getProperty('sessionName')}" />
 	</bean>
 
-	<bean id="hoeffnerConverion" class="com.piskunov.xmlconverter.JobWrapper">
+	<bean id="prod_hoeffnerConverion" class="com.piskunov.xmlconverter.JobWrapper">
 		<property name="dataMapping" ref="hoeffner2csvDM" />
 		<property name="inputDataType" value="csv" />
 		<property name="inputFolder" value="input/hoeffner" />
+		<property name="outputFolder" value="output/prod" />
 		<property name="inputCSVDelimiter" value=";" />
 		<property name="sessionName"
-			value="#{hoeffnerParametersCSV2CSV.getProperty('sessionName')}" />
+			value="#{prod_hoeffnerParametersCSV2CSV.getProperty('sessionName')}" />
 	</bean>
 
-	<bean id="home24_2csvDM" class="com.piskunov.xmlconverter.mapping.DataMapping">
+	<bean id="prod_home24_2csvDM" class="com.piskunov.xmlconverter.mapping.DataMapping">
 		<property name="delimiter" value=";" />
 		<property name="rules">
 			<list>
@@ -199,7 +201,7 @@
 						<bean
 							class="com.piskunov.xmlconverter.mapping.adapters.SimpleValueAdapter">
 							<property name="source"
-								value="#{home24ParametersCSV2CSV.getProperty('cpc_mm')}" />
+								value="#{prod_home24ParametersCSV2CSV.getProperty('cpc_mm')}" />
 						</bean>
 					</property>
 				</bean>
@@ -214,7 +216,7 @@
 						<bean
 							class="com.piskunov.xmlconverter.mapping.adapters.SimpleValueAdapter">
 							<property name="source"
-								value="#{home24ParametersCSV2CSV.getProperty('partner_id')}" />
+								value="#{prod_home24ParametersCSV2CSV.getProperty('partner_id')}" />
 						</bean>
 					</property>
 
@@ -226,7 +228,7 @@
 						<bean
 							class="com.piskunov.xmlconverter.mapping.adapters.UUIDGeneratorAdapter">
 							<property name="baseValue"
-								value="#{home24ParametersCSV2CSV.getProperty('partner_id')}" />
+								value="#{prod_home24ParametersCSV2CSV.getProperty('partner_id')}" />
 							<property name="baseSources">
 								<list>
 									<value>NAME</value>
@@ -272,7 +274,7 @@
 		</property>
 	</bean>
 
-	<bean id="hoeffner2csvDM" class="com.piskunov.xmlconverter.mapping.DataMapping">
+	<bean id="prod_hoeffner2csvDM" class="com.piskunov.xmlconverter.mapping.DataMapping">
 		<property name="delimiter" value=";" />
 		<property name="rules">
 			<list>
@@ -416,7 +418,7 @@
 						<bean
 							class="com.piskunov.xmlconverter.mapping.adapters.SimpleValueAdapter">
 							<property name="source"
-								value="#{hoeffnerParametersCSV2CSV.getProperty('cpc_mm')}" />
+								value="#{prod_hoeffnerParametersCSV2CSV.getProperty('cpc_mm')}" />
 						</bean>
 					</property>
 				</bean>
@@ -431,7 +433,7 @@
 						<bean
 							class="com.piskunov.xmlconverter.mapping.adapters.SimpleValueAdapter">
 							<property name="source"
-								value="#{hoeffnerParametersCSV2CSV.getProperty('partner_id')}" />
+								value="#{prod_hoeffnerParametersCSV2CSV.getProperty('partner_id')}" />
 						</bean>
 					</property>
 
@@ -443,7 +445,7 @@
 						<bean
 							class="com.piskunov.xmlconverter.mapping.adapters.UUIDGeneratorAdapter">
 							<property name="baseValue"
-								value="#{hoeffnerParametersCSV2CSV.getProperty('partner_id')}" />
+								value="#{prod_hoeffnerParametersCSV2CSV.getProperty('partner_id')}" />
 							<property name="baseSources">
 								<list>
 									<value>NAME</value>
