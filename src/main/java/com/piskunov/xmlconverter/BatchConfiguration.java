@@ -28,6 +28,7 @@ import org.springframework.oxm.xstream.XStreamMarshaller;
 
 import com.piskunov.xmlconverter.mapping.InputData;
 import com.piskunov.xmlconverter.mapping.MappingProcessor;
+import com.piskunov.xmlconverter.mapping.MappingStatistics;
 import com.piskunov.xmlconverter.mapping.OutputData;
 import com.piskunov.xmlconverter.unmarshal.CSVLineMapper;
 import com.piskunov.xmlconverter.unmarshal.XMLUnmarshaller;

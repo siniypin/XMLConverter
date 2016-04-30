@@ -144,8 +144,6 @@ public class JobWrapper {
 			throw new MappingException("Data Mapping is not set for JobConfigurator");
 		}
 
-		processor.resetProcessor();
-
 		SimpleDateFormat sdfDate = new SimpleDateFormat("yyyyMMddHHmmss");
 		Date now = new Date();
 		String fileBaseName = sessionName.replace(" ", "") + "_" + sdfDate.format(now);
