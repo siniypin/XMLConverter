@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.util.StringUtils;
 
 /**
  * Created by Vladimir Piskunov on 2/25/16.
@@ -180,7 +181,7 @@ public class MappingProcessor implements ItemProcessor<InputData, OutputData> {
         } else if (rule.getSource() != null && rule.getSource().length() != 0) {
             String s = data.getPairs().get(rule.getSource());
             if (s != null) {
-                resultValues.add(s);
+            	resultValues.add(StringUtils.delete(s, "\""));
             }
         } else {
             return resultValues;
