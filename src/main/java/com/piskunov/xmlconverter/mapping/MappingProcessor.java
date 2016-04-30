@@ -21,13 +21,14 @@ import org.springframework.core.io.Resource;
 
 public class MappingProcessor implements ItemProcessor<InputData, OutputData> {
 
+    @Autowired
+    MappingStatistics mappingStatistics;
+
     private static Logger logger = Logger.getLogger(MappingProcessor.class.getName());
     private DataMapping dataMapping;
     private Resource skippedItemsLog;
-    private boolean printHeaders = true;
 
-    private int processedLines;
-    private int skippedLines;
+    private boolean printHeaders = true;
 
     public Resource getSkippedItemsLog() {
         return skippedItemsLog;
@@ -53,15 +54,10 @@ public class MappingProcessor implements ItemProcessor<InputData, OutputData> {
         this.printHeaders = printHeaders;
     }
 
-    public void resetProcessor(){
-        skippedLines = 0;
-        processedLines = 0;
-    }
-
     @Override
     public OutputData process(InputData data) throws Exception {
 
-        processedLines++;
+        mappingStatistics.increaseProcessedItems();
 
         List<String> resultLines = new LinkedList<>();
 
@@ -97,11 +93,15 @@ public class MappingProcessor implements ItemProcessor<InputData, OutputData> {
             } catch (MappingException e) {
 
                 //mapping exception handling
-                logger.warning(e.getMessage());
+                //logger.warning(e.getMessage());
 
                 if (rule.isSkipRecordOnError()) {
-                    logSkippedRecord(data);
+                    logSkippedRecord(e, data.getSource());
+                    mappingStatistics.increaseSkippedItems();
+                    mappingStatistics.addFailedWithErrorRule(rule.getTarget());
                     return null;
+                } else {
+                    mappingStatistics.addFailedWithWarningsRule(rule.getTarget());
                 }
 
                 for (String line : resultLines) {
@@ -114,6 +114,9 @@ public class MappingProcessor implements ItemProcessor<InputData, OutputData> {
 
 
         //make ret value: remove last delimiter, add line separator
+
+        mappingStatistics.increaseMultipliedItems(resultLines.size() - 1);
+
         String ret = "";
 
         for (String line : resultLines) {
@@ -127,7 +130,7 @@ public class MappingProcessor implements ItemProcessor<InputData, OutputData> {
         return new OutputData(ret);
     }
 
-    private void logSkippedRecord(InputData data) {
+    private void logSkippedRecord(MappingException e, String line) {
 
         Writer output = null;
         try {
@@ -136,8 +139,11 @@ public class MappingProcessor implements ItemProcessor<InputData, OutputData> {
                 file.getParentFile().mkdirs();
                 file.createNewFile();
             }
+
             output = new BufferedWriter(new FileWriter(file, true));
-            output.append(data.getSource() + "\n");
+            output.append(e.getMessage() + "\n");
+            output.append(line + "\n");
+
         } catch (IOException ioe) {
             ioe.printStackTrace();
         } finally {
@@ -147,8 +153,6 @@ public class MappingProcessor implements ItemProcessor<InputData, OutputData> {
                 } catch (IOException ioe) {
                     ioe.printStackTrace();
                 }
-            skippedLines++;
-            logger.warning( skippedLines + " form " + processedLines + " skipped. Last skipped line: " + data.getSource());
         }
 
     }
@@ -184,13 +188,13 @@ public class MappingProcessor implements ItemProcessor<InputData, OutputData> {
 
         //check required rule
         if (rule.isRequired() && resultValues.size() == 0) {
-            throw new MappingException(rule, "Not empty value is required.", data);
+            throw new MappingException(rule, "Not empty value is required.");
         }
 
         for (String result : resultValues) {
 
             if (rule.isRequired() && result.length() == 0) {
-                throw new MappingException(rule, "Not empty value is required.", data);
+                throw new MappingException(rule, "Not empty value is required.");
             }
 
             //check equal rule

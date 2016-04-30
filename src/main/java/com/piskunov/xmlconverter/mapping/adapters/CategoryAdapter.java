@@ -5,12 +5,13 @@ import com.piskunov.xmlconverter.mapping.InputData;
 import com.piskunov.xmlconverter.mapping.MappingException;
 import com.piskunov.xmlconverter.mapping.MappingRule;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Vladimir Piskunov on 2/29/16.
  */
-public class CategoryAdapter implements MappingAdapter {
+public class CategoryAdapter extends BaseMappingAdapter {
 
     private Dictionary categoryDictionary;
     private Dictionary nameDictionary;
@@ -50,7 +51,7 @@ public class CategoryAdapter implements MappingAdapter {
     }
 
     @Override
-    public List<String> process(MappingRule rule, InputData data) throws MappingException {
+    public List<String> processInternal(MappingRule rule, InputData data) throws MappingException {
 
         if(categoryDictionary == null) {
             throw new MappingException(this.getClass().getSimpleName() + ": Category dictionary not set");
@@ -59,7 +60,11 @@ public class CategoryAdapter implements MappingAdapter {
         String key = data.getPairs().get(categorySource);
         List<String> resultValues = categoryDictionary.search(key, false);
 
-        if(resultValues.size() != 0 || nameDictionary == null) {
+        if(resultValues == null && nameDictionary == null){
+            return new ArrayList<>();
+        }
+
+        if((resultValues.size() != 0 || nameDictionary == null)) {
             return resultValues;
         }
 

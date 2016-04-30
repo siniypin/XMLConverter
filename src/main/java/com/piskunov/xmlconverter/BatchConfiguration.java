@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -111,8 +112,8 @@ public class BatchConfiguration {
     }
 
     @Bean
-    public Job job(Step step) throws IOException {
-        return jobBuilderFactory.get("Job")
+    public Job job(Step step, JobCleanUpListener jobCleanUpListener) throws IOException {
+        return jobBuilderFactory.get("Job").listener(jobCleanUpListener)
                 .incrementer(new RunIdIncrementer())
                 .flow(step)
                 .end()
@@ -130,7 +131,14 @@ public class BatchConfiguration {
                 .build();
     }
 
+    @Bean
+    JobCleanUpListener jobCleanUpListener(){
+        return new JobCleanUpListener();
+    }
 
-
+    @Bean
+    MappingStatistics mappingStatistics(){
+        return new MappingStatistics();
+    }
 
 }

@@ -1,0 +1,13 @@
+#!/bin/sh
+
+cd "$(dirname "$0")"
+
+JAR=$(ls | grep '\<xmlconverter.*\.jar\>')
+
+if [ -f ./$JAR ]; then
+	java -jar $JAR $@ &
+else
+	echo xmlconverter-VERSION.jar is not found in current directory: $(pwd)
+	sh
+fi
+

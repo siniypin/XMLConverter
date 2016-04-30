@@ -185,7 +185,7 @@
                     <property name="target" value="cpc_mm"/>
                     <property name="adapter">
                         <bean class="com.piskunov.xmlconverter.mapping.adapters.SimpleValueAdapter">
-                            <property name="value" value="#{sessionParametersCSV2CSV.getProperty('cpc_mm')}"/>
+                            <property name="source" value="#{sessionParametersCSV2CSV.getProperty('cpc_mm')}"/>
                         </bean>
                     </property>
                 </bean>
@@ -198,7 +198,7 @@
                     <property name="target" value="partner_id"/>
                     <property name="adapter">
                         <bean class="com.piskunov.xmlconverter.mapping.adapters.SimpleValueAdapter">
-                            <property name="value" value="#{sessionParametersCSV2CSV.getProperty('partner_id')}"/>
+                            <property name="source" value="#{sessionParametersCSV2CSV.getProperty('partner_id')}"/>
                         </bean>
                     </property>
                 </bean>
@@ -222,7 +222,7 @@
                     <property name="target" value="free_delivery"/>
                     <property name="adapter">
                         <bean class="com.piskunov.xmlconverter.mapping.adapters.BooleanExpressionsAdapter">
-                            <property name="expression" value="$shipment_cost == 0"/>
+                            <property name="source" value="$shipment_cost == 0"/>
                         </bean>
                     </property>
 
@@ -243,7 +243,7 @@
                     <property name="target" value="has_discount"/>
                     <property name="adapter">
                         <bean class="com.piskunov.xmlconverter.mapping.adapters.BooleanExpressionsAdapter">
-                            <property name="expression" value="$actual_price less $old_price"/>
+                            <property name="source" value="$actual_price less $old_price"/>
                         </bean>
                     </property>
 

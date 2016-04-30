@@ -10,20 +10,10 @@ import java.util.List;
 /**
  * Created by Vladimir Piskunov on 3/17/16.
  */
-public class PriceAdapter implements MappingAdapter {
-
-    private String source;
-
-    public String getSource() {
-        return source;
-    }
-
-    public void setSource(String source) {
-        this.source = source;
-    }
+public class PriceAdapter extends BaseMappingAdapter {
 
     @Override
-    public List<String> process(MappingRule rule, InputData data) throws MappingException {
+    public List<String> processInternal(MappingRule rule, InputData data) throws MappingException {
 
         List<String> resultValues = new ArrayList<>();
 

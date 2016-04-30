@@ -10,11 +10,10 @@ import java.util.List;
 /**
  * Created by Vladimir Piskunov on 2/29/16.
  */
-public class DimensionAdapter implements MappingAdapter {
+public class DimensionAdapter extends BaseMappingAdapter {
 
     private String delimiter;
     private int position;
-    private String source;
 
     public String getDelimiter() {
         return delimiter;
@@ -32,16 +31,8 @@ public class DimensionAdapter implements MappingAdapter {
         this.position = position;
     }
 
-    public String getSource() {
-        return source;
-    }
-
-    public void setSource(String source) {
-        this.source = source;
-    }
-
     @Override
-    public List<String> process(MappingRule rule, InputData data) throws MappingException {
+    public List<String> processInternal(MappingRule rule, InputData data) throws MappingException {
 
         List<String> resultValues = new ArrayList<>();
 
@@ -67,6 +58,8 @@ public class DimensionAdapter implements MappingAdapter {
             }
 
             resultValues.add(String.valueOf(intValue));
+        } else {
+            throw new MappingException(this.getClass().getSimpleName() + ": Dimentions format is incorrect: " +  sourceValue);
         }
 
         return resultValues;

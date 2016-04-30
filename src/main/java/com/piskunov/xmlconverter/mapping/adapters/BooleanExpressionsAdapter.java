@@ -14,28 +14,16 @@ import java.util.logging.Logger;
 /**
  * Created by Vladimir Piskunov on 2/28/16.
  */
-public class BooleanExpressionsAdapter implements MappingAdapter {
+public class BooleanExpressionsAdapter extends BaseMappingAdapter {
 
     static Logger logger = Logger.getLogger(BooleanExpressionsAdapter.class.getName());
 
-
-    private String expression;
-
-    public String getExpression() {
-        return expression;
-    }
-
-    public void setExpression(String expression) {
-        this.expression = expression;
-    }
-
-
     @Override
-    public List<String> process(MappingRule rule, InputData data) throws MappingException {
+    public List<String> processInternal(MappingRule rule, InputData data) throws MappingException {
 
         List<String> resultValues = new ArrayList<>();
 
-        String exp = expression;
+        String exp = source;
 
         if(exp == null)
             throw new MappingException(this.getClass().getSimpleName() + "Adapter Expression is not set for rule: " + rule.getTarget());

@@ -10,23 +10,14 @@ import java.util.List;
 /**
  * Created by Vladimir Piskunov on 2/29/16.
  */
-public class SimpleValueAdapter implements MappingAdapter{
+public class SimpleValueAdapter extends BaseMappingAdapter{
 
-    private String value;
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
 
     @Override
-    public List<String> process(MappingRule rule, InputData data) throws MappingException {
+    public List<String> processInternal(MappingRule rule, InputData data) throws MappingException {
 
         List<String> resultValues = new ArrayList<>();
-        resultValues.add(value);
+        resultValues.add(source);
 
         return resultValues;
     }
