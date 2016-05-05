@@ -14,9 +14,9 @@ public class Application {
 
 		JobLauncher launcher = context.getBean(JobLauncher.class);
 
-		for(JobWrapper jobWrapper : context.getBeansOfType(JobWrapper.class).values()) {
+		for (JobWrapper jobWrapper : context.getBeansOfType(JobWrapper.class).values()) {
 			Job job = jobWrapper.getJob();
-			if(job != null) {
+			if (job != null) {
 				launcher.run(job, new JobParameters());
 			}
 		}

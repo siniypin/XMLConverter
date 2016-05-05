@@ -156,6 +156,7 @@ public class JobWrapper {
 		} else if (inputDataType.equals(CSV_TYPE)) {
 			lineMapper.setDelimiter(inputCSVDelimiter);
 			dataSourceReader.setDelegate(csvReader);
+			dataSourceReader.setStrict(true);
 		}
 
 		String baseFolder = File.separator + sessionName.replace(" ", "") + File.separator;

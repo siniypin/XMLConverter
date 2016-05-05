@@ -1,12 +1,10 @@
 package com.piskunov.xmlconverter;
 
-import com.piskunov.xmlconverter.mapping.MappingProcessor;
-import com.piskunov.xmlconverter.mapping.MappingStatistics;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.logging.Logger;
+import com.piskunov.xmlconverter.mapping.MappingStatistics;
 
 /**
  * Created by Vladimir Piskunov on 3/19/16.
