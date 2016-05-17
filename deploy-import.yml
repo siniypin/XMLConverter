@@ -1,0 +1,8 @@
+---
+- hosts: sandbox
+  remote_user: backend
+  sudo: true
+  tasks:
+  - name: copy xmlconverter
+    copy: src=./target/ dest=/home/deployer/import/ mode=0777
+
