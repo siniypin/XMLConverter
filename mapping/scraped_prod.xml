@@ -246,7 +246,7 @@
 					<property name="adapter">
 						<bean
 							class="com.piskunov.xmlconverter.mapping.adapters.BooleanExpressionsAdapter">
-							<property name="source" value="$DELIVERY_PRICE == 0" />
+							<property name="source" value="$FREE_DELIVERY == 1" />
 						</bean>
 					</property>
 				</bean>
@@ -464,7 +464,7 @@
 					<property name="adapter">
 						<bean
 							class="com.piskunov.xmlconverter.mapping.adapters.BooleanExpressionsAdapter">
-							<property name="source" value="$DELIVERY_PRICE == 0" />
+							<property name="source" value="$FREE_DELIVERY == 1" />
 						</bean>
 					</property>
 				</bean>
