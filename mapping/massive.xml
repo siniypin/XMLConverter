@@ -177,6 +177,18 @@
 						</bean>
 					</property>
 				</bean>
+				
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="width" />
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="height" />
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="depth" />
+				</bean>
 
 				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
 					<property name="target" value="cpc_mm" />
