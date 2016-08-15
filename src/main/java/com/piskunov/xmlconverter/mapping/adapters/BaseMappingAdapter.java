@@ -12,9 +12,9 @@ import java.util.List;
  */
 public abstract class BaseMappingAdapter implements MappingAdapter{
 
-    MappingAdapter nextAdapter;
+    protected MappingAdapter nextAdapter;
 
-    String source;
+    protected String source;
 
     public MappingAdapter getNextAdapter() {
         return nextAdapter;

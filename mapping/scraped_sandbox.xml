@@ -558,18 +558,24 @@
 					<property name="skipRecordOnError" value="true" />
 				</bean>
 
-				<!--<bean class="com.piskunov.xmlconverter.mapping.MappingRule">-->
-					<!--<property name="target" value="alter_price" />-->
-					<!--<property name="adapter">-->
-						<!--<bean class="com.piskunov.xmlconverter.mapping.adapters.PriceAdapter">-->
-							<!--<property name="source" value="Price_old" />-->
-						<!--</bean>-->
-					<!--</property>-->
-				<!--</bean>-->
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="alter_price" />
+					<property name="adapter">
+						<bean class="com.piskunov.xmlconverter.mapping.adapters.PriceAdapter">
+							<property name="source" value="Price_old" />
+						</bean>
+					</property>
+				</bean>
 
 				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
 					<property name="target" value="currency" />
-					<property name="source" value="CURRENCY" />
+					<property name="adapter">
+						<bean class="com.piskunov.xmlconverter.mapping.adapters.ValueAdapter">
+							<property name="value">
+								<list><value>EUR</value></list>
+							</property>
+						</bean>
+					</property>
 					<property name="equalsTo" value="EUR" />
 					<property name="skipRecordOnError" value="true" />
 				</bean>
@@ -606,7 +612,7 @@
 				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
 					<property name="target" value="color" />
 					<property name="adapter">
-						<bean class="com.piskunov.xmlconverter.mapping.adapters.ColorTitleAdapter">
+						<bean class="com.piskunov.xmlconverter.mapping.adapters.massiv.ColorTitleAdapter">
 							<property name="valueSet">
 								<bean class="com.piskunov.xmlconverter.mapping.ValueSet">
 									<property name="dictionaryFile" value="file:dictionary/colors.csv"/>
@@ -628,11 +634,6 @@
 					<property name="source" value="MATERIAL" />
 					<property name="maxSize" value="300" />
 				</bean>
-
-
-
-
-
 
 				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
 					<property name="target" value="cpc_mm" />
@@ -671,8 +672,6 @@
 									  value="#{hoeffnerParametersCSV2CSV.getProperty('partner_id')}" />
 							<property name="baseSources">
 								<list>
-									<value>NAME</value>
-									<value>COLOR</value>
 									<value>ArtNumber</value>
 								</list>
 							</property>
