@@ -9,6 +9,7 @@ import org.springframework.context.ApplicationContext;
 
 @SpringBootApplication
 public class Application {
+    //run with allowed session as first parametes, all session will be activated otherwise
     public static void main(String[] args) throws Exception {
         ApplicationContext context = SpringApplication.run(Application.class, args);
 
