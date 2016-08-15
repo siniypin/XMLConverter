@@ -25,7 +25,7 @@
 		<property name="parameters">
 			<map>
 				<entry key="partner_id" value="1" />
-				<entry key="cpc_mm" value="10000" />
+				<entry key="cpc_mm" value="100000" />
 				<entry key="sessionName" value="hoeffner" />
 			</map>
 		</property>
@@ -35,7 +35,7 @@
 		<property name="parameters">
 			<map>
 				<entry key="partner_id" value="2" />
-				<entry key="cpc_mm" value="10000" />
+				<entry key="cpc_mm" value="100000" />
 				<entry key="sessionName" value="home24" />
 			</map>
 		</property>
@@ -267,7 +267,7 @@
 					<property name="adapter">
 						<bean
 							class="com.piskunov.xmlconverter.mapping.adapters.BooleanExpressionsAdapter">
-							<property name="source" value="$PRICE less $ALTER_PRICE" />
+							<property name="source" value="$ALTER_PRICE less $PRICE" />
 						</bean>
 					</property>
 				</bean>
