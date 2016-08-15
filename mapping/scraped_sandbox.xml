@@ -612,7 +612,7 @@
 				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
 					<property name="target" value="color" />
 					<property name="adapter">
-						<bean class="com.piskunov.xmlconverter.mapping.adapters.massiv.ColorTitleAdapter">
+						<bean class="com.piskunov.xmlconverter.mapping.adapters.SetFromValueAdapter">
 							<property name="valueSet">
 								<bean class="com.piskunov.xmlconverter.mapping.ValueSet">
 									<property name="dictionaryFile" value="file:dictionary/colors.csv"/>
@@ -631,8 +631,16 @@
 
 				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
 					<property name="target" value="material" />
-					<property name="source" value="MATERIAL" />
-					<property name="maxSize" value="300" />
+					<property name="adapter">
+						<bean class="com.piskunov.xmlconverter.mapping.adapters.SetFromValueAdapter">
+							<property name="valueSet">
+								<bean class="com.piskunov.xmlconverter.mapping.ValueSet">
+									<property name="dictionaryFile" value="file:dictionary/materials.csv"/>
+								</bean>
+							</property>
+							<property name="source" value="Title" />
+						</bean>
+					</property>
 				</bean>
 
 				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
