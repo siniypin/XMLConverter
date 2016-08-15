@@ -25,7 +25,6 @@ public class CSVLineMapper implements LineMapper {
 
     private String delimiter = ",";
 
-
     @Override
     public InputData mapLine(String s, int i) throws Exception {
 
@@ -37,16 +36,32 @@ public class CSVLineMapper implements LineMapper {
             headers = new LinkedList<>();
             //fill headers
             while(scanner.hasNext()){
-                headers.add(scanner.next());
+                headers.add(trimColons(scanner.next()));
             }
         } else {
             for(String header: headers) {
                 if(scanner.hasNext()){
-                    data.getPairs().put(header, scanner.next());
+                    data.getPairs().put(header, trimColons(scanner.next()));
                 }
             }
             data.setSource(s);
         }
         return data;
+    }
+
+    private String trimColons(String s){
+        if (s == null || s.isEmpty()){
+            return s;
+        }
+
+        if (s.startsWith("\"")){
+            return s.length() > 2 && s.endsWith("\"") ? s.substring(1,  s.length() - 1) : s;
+        }
+
+        if (s.startsWith("\'")){
+            return s.length() > 2 && s.endsWith("\'") ? s.substring(1,  s.length() - 1) : s;
+        }
+
+        return s;
     }
 }

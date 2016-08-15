@@ -6,6 +6,7 @@ import com.piskunov.xmlconverter.mapping.MappingException;
 import com.piskunov.xmlconverter.mapping.MappingRule;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -52,22 +53,22 @@ public class CategoryAdapter extends BaseMappingAdapter {
 
     @Override
     public List<String> processInternal(MappingRule rule, InputData data) throws MappingException {
+        List<String> resultValues = null;
 
-        if(categoryDictionary == null) {
+        if (nameDictionary != null) {
+            resultValues = nameDictionary.search(data.getPairs().get(nameSource), true);
+            if (resultValues != null && !resultValues.isEmpty()){
+                return resultValues;
+            }
+        }
+
+        if (categoryDictionary == null) {
             throw new MappingException(this.getClass().getSimpleName() + ": Category dictionary not set");
         }
 
         String key = data.getPairs().get(categorySource);
-        List<String> resultValues = categoryDictionary.search(key, false);
+        resultValues = categoryDictionary.search(key, false);
 
-        if(resultValues == null && nameDictionary == null){
-            return new ArrayList<>();
-        }
-
-        if((resultValues.size() != 0 || nameDictionary == null)) {
-            return resultValues;
-        }
-
-        return nameDictionary.search(data.getPairs().get(nameSource), true);
+        return resultValues != null ? resultValues : Collections.emptyList();
     }
 }

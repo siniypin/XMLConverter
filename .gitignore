@@ -3,6 +3,8 @@
 /input/
 /output/
 /logs/
+/.idea/
 .classpath
 .project
 .settings
+*.iml

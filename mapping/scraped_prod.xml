@@ -41,25 +41,25 @@
 		</property>
 	</bean>
 
-	<bean id="prod_home24Converion" class="com.piskunov.xmlconverter.JobWrapper">
-		<property name="dataMapping" ref="prod_home24_2csvDM" />
-		<property name="inputDataType" value="csv" />
-		<property name="inputFolder" value="input/home24" />
-		<property name="outputFolder" value="output/prod" />
-		<property name="inputCSVDelimiter" value=";" />
-		<property name="sessionName"
-			value="#{prod_home24ParametersCSV2CSV.getProperty('sessionName')}" />
-	</bean>
+	<!--<bean id="prod_home24Converion" class="com.piskunov.xmlconverter.JobWrapper">-->
+		<!--<property name="dataMapping" ref="prod_home24_2csvDM" />-->
+		<!--<property name="inputDataType" value="csv" />-->
+		<!--<property name="inputFolder" value="input/home24" />-->
+		<!--<property name="outputFolder" value="output/prod" />-->
+		<!--<property name="inputCSVDelimiter" value=";" />-->
+		<!--<property name="sessionName"-->
+			<!--value="#{prod_home24ParametersCSV2CSV.getProperty('sessionName')}" />-->
+	<!--</bean>-->
 
-	<bean id="prod_hoeffnerConverion" class="com.piskunov.xmlconverter.JobWrapper">
-		<property name="dataMapping" ref="prod_hoeffner2csvDM" />
-		<property name="inputDataType" value="csv" />
-		<property name="inputFolder" value="input/hoeffner" />
-		<property name="outputFolder" value="output/prod" />
-		<property name="inputCSVDelimiter" value=";" />
-		<property name="sessionName"
-			value="#{prod_hoeffnerParametersCSV2CSV.getProperty('sessionName')}" />
-	</bean>
+	<!--<bean id="prod_hoeffnerConverion" class="com.piskunov.xmlconverter.JobWrapper">-->
+		<!--<property name="dataMapping" ref="prod_hoeffner2csvDM" />-->
+		<!--<property name="inputDataType" value="csv" />-->
+		<!--<property name="inputFolder" value="input/hoeffner" />-->
+		<!--<property name="outputFolder" value="output/prod" />-->
+		<!--<property name="inputCSVDelimiter" value=";" />-->
+		<!--<property name="sessionName"-->
+			<!--value="#{prod_hoeffnerParametersCSV2CSV.getProperty('sessionName')}" />-->
+	<!--</bean>-->
 
 	<bean id="prod_home24_2csvDM" class="com.piskunov.xmlconverter.mapping.DataMapping">
 		<property name="delimiter" value=";" />
