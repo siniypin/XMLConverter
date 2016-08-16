@@ -85,7 +85,7 @@ public class Dictionary {
 			}
 			Matcher matcher = pattern.matcher(key);
 			if (matcher.find()) {
-				ret.addAll(dictionary.get(dictionaryKey));
+				ret.add(dictionary.get(dictionaryKey).get(0));
 			}
 		}
 		return ret;
