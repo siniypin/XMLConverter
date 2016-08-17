@@ -42,6 +42,16 @@
 		<property name="sessionName"
 			value="#{massivParametersCSV2CSV.getProperty('sessionName')}" />
 	</bean>
+	
+	<bean id="massivConverionProd" class="com.piskunov.xmlconverter.JobWrapper">
+		<property name="dataMapping" ref="massiv2csvDMProd" />
+		<property name="inputDataType" value="csv" />
+		<property name="inputFolder" value="input/massiv" />
+		<property name="outputFolder" value="output/sandbox" />
+		<property name="inputCSVDelimiter" value=";" />
+		<property name="sessionName"
+			value="#{massivParametersCSV2CSV.getProperty('sessionName')}" />
+	</bean>
 
 	<bean id="massiv2csvDM" class="com.piskunov.xmlconverter.mapping.DataMapping">
 		<property name="delimiter" value=";" />
@@ -62,6 +72,235 @@
 								<bean class="com.piskunov.xmlconverter.mapping.Dictionary">
 									<property name="dictionaryFile"
 										value="file:dictionary/massiv-sandbox-cat-mapping.csv" />
+								</bean>
+							</property>
+							<property name="categorySource" value="ProductCategoryName" />
+						</bean>
+					</property>
+					<property name="skipRecordOnError" value="true" />
+					<property name="required" value="true" />
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="name" />
+					<property name="source" value="Title" />
+					<property name="required" value="true" />
+					<property name="skipRecordOnError" value="true" />
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="price" />
+					<property name="adapter">
+						<bean class="com.piskunov.xmlconverter.mapping.adapters.PriceAdapter">
+							<property name="source" value="Price" />
+						</bean>
+					</property>
+					<property name="required" value="true" />
+					<property name="skipRecordOnError" value="true" />
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="alter_price" />
+					<property name="adapter">
+						<bean class="com.piskunov.xmlconverter.mapping.adapters.PriceAdapter">
+							<property name="source" value="Price_old" />
+						</bean>
+					</property>
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="currency" />
+					<property name="adapter">
+						<bean class="com.piskunov.xmlconverter.mapping.adapters.ValueAdapter">
+							<property name="value">
+								<list>
+									<value>EUR</value>
+								</list>
+							</property>
+						</bean>
+					</property>
+					<property name="equalsTo" value="EUR" />
+					<property name="skipRecordOnError" value="true" />
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="delivery_price" />
+					<property name="adapter">
+						<bean class="com.piskunov.xmlconverter.mapping.adapters.PriceAdapter">
+							<property name="source" value="Shipping" />
+						</bean>
+					</property>
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="delivery_description" />
+					<property name="source" value="ShippingSuffix" />
+					<property name="maxSize" value="300" />
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="image_url" />
+					<property name="source" value="Img_url" />
+					<property name="required" value="true" />
+					<property name="skipRecordOnError" value="true" />
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="deep_url" />
+					<property name="source" value="Deeplink1" />
+					<property name="required" value="true" />
+					<property name="skipRecordOnError" value="true" />
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="color" />
+					<property name="adapter">
+						<bean
+							class="com.piskunov.xmlconverter.mapping.adapters.SetFromValueAdapter">
+							<property name="valueSet">
+								<bean class="com.piskunov.xmlconverter.mapping.ValueSet">
+									<property name="dictionaryFile" value="file:dictionary/colors.csv" />
+								</bean>
+							</property>
+							<property name="source" value="Title" />
+						</bean>
+					</property>
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="brand" />
+					<property name="source" value="Brand" />
+					<property name="maxSize" value="300" />
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="material" />
+					<property name="adapter">
+						<bean
+							class="com.piskunov.xmlconverter.mapping.adapters.SetFromValueAdapter">
+							<property name="valueSet">
+								<bean class="com.piskunov.xmlconverter.mapping.ValueSet">
+									<property name="dictionaryFile" value="file:dictionary/materials.csv" />
+								</bean>
+							</property>
+							<property name="source" value="Title" />
+						</bean>
+					</property>
+				</bean>
+				
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="width" />
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="height" />
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="depth" />
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="cpc_mm" />
+					<property name="adapter">
+						<bean
+							class="com.piskunov.xmlconverter.mapping.adapters.SimpleValueAdapter">
+							<property name="source"
+								value="#{massivParametersCSV2CSV.getProperty('cpc_mm')}" />
+						</bean>
+					</property>
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="marks" />
+					<!-- <property name="adapter"> <bean class="com.piskunov.xmlconverter.mapping.adapters.BooleanExpressionsAdapter"> 
+						<property name="source" value="$CF_Availability == 1" /> -> if true : available 
+						</bean> </property> -->
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="partner_id" />
+					<property name="adapter">
+						<bean
+							class="com.piskunov.xmlconverter.mapping.adapters.SimpleValueAdapter">
+							<property name="source"
+								value="#{massivParametersCSV2CSV.getProperty('partner_id')}" />
+						</bean>
+					</property>
+
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="uid" />
+					<property name="skipRecordOnError" value="true" />
+					<property name="adapter">
+						<bean scope="prototype"
+							class="com.piskunov.xmlconverter.mapping.adapters.UUIDGeneratorAdapter">
+							<property name="baseValue"
+								value="#{massivParametersCSV2CSV.getProperty('partner_id')}" />
+							<property name="baseSources">
+								<list>
+									<value>Title</value>
+									<value>ArtNumber</value>
+								</list>
+							</property>
+						</bean>
+					</property>
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="free_delivery" />
+					<property name="adapter">
+						<bean
+							class="com.piskunov.xmlconverter.mapping.adapters.BooleanExpressionsAdapter">
+							<property name="source" value="$Shipping == 0" />
+						</bean>
+					</property>
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="immediate_delivery" />
+					<property name="adapter">
+						<bean
+							class="com.piskunov.xmlconverter.mapping.adapters.BooleanRegExpAdapter">
+							<property name="source" value="CF_Delivery_time" />
+							<property name="expression" value=".*([w|W]erktag[e]?|[S|s]tunde[n]?).*" />
+						</bean>
+					</property>
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="has_discount" />
+					<property name="adapter">
+						<bean
+							class="com.piskunov.xmlconverter.mapping.adapters.BooleanExpressionsAdapter">
+							<property name="source" value="$Price_old more $Price" />
+						</bean>
+					</property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="massiv2csvDMProd" class="com.piskunov.xmlconverter.mapping.DataMapping">
+		<property name="delimiter" value=";" />
+		<property name="rules">
+			<list>
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="category_id" />
+					<property name="adapter">
+						<bean class="com.piskunov.xmlconverter.mapping.adapters.CategoryAdapter">
+							<property name="nameDictionary">
+								<bean class="com.piskunov.xmlconverter.mapping.Dictionary">
+									<property name="dictionaryFile"
+										value="file:dictionary/massiv-prod-name-mapping.csv" />
+								</bean>
+							</property>
+							<property name="nameSource" value="Title" />
+							<property name="categoryDictionary">
+								<bean class="com.piskunov.xmlconverter.mapping.Dictionary">
+									<property name="dictionaryFile"
+										value="file:dictionary/massiv-prod-cat-mapping.csv" />
 								</bean>
 							</property>
 							<property name="categorySource" value="ProductCategoryName" />
