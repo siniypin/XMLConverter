@@ -45,7 +45,7 @@
 		<property name="dataMapping" ref="buerostuhl2csvDMProd" />
 		<property name="inputDataType" value="csv" />
 		<property name="inputFolder" value="input/buerostuhl" />
-		<property name="outputFolder" value="output/sandbox" />
+		<property name="outputFolder" value="output/prod" />
 		<property name="inputCSVDelimiter" value=";" />
 		<property name="sessionName"
 			value="#{buerostuhlParametersCSV2CSV.getProperty('sessionName')}" />

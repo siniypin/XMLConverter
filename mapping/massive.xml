@@ -47,7 +47,7 @@
 		<property name="dataMapping" ref="massiv2csvDMProd" />
 		<property name="inputDataType" value="csv" />
 		<property name="inputFolder" value="input/massiv" />
-		<property name="outputFolder" value="output/sandbox" />
+		<property name="outputFolder" value="output/prod" />
 		<property name="inputCSVDelimiter" value=";" />
 		<property name="sessionName"
 			value="#{massivParametersCSV2CSV.getProperty('sessionName')}" />
