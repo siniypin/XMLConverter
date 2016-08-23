@@ -9,6 +9,7 @@ public class MappingRule {
 
     //source field
     private String source;
+    private String altSource;
 
     //target field
     private String target;
@@ -38,7 +39,15 @@ public class MappingRule {
         this.source = source;
     }
 
-    public String getTarget() {
+    public String getAltSource() {
+		return altSource;
+	}
+
+	public void setAltSource(String altSource) {
+		this.altSource = altSource;
+	}
+
+	public String getTarget() {
         return target;
     }
 
