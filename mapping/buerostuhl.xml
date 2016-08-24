@@ -131,8 +131,6 @@
 
 				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
 					<property name="target" value="delivery_description" />
-					<property name="source" value="ShippingSuffix" />
-					<property name="maxSize" value="300" />
 				</bean>
 
 				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
@@ -358,8 +356,6 @@
 
 				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
 					<property name="target" value="delivery_description" />
-					<property name="source" value="ShippingSuffix" />
-					<property name="maxSize" value="300" />
 				</bean>
 
 				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">

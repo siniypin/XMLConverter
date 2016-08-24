@@ -1,11 +1,16 @@
-Anstellregal|Eckregal,317
+Anstellregal,317
+Eckregal,317
 Rolladenschrank,319
-Glastürenschrank|Flügeltürenschrank|GlasTürenschr,319
+Glastürenschrank,319
+Flügeltürenschrank,319
+GlasTürenschr,319
 Geramöbel Regal,317
-Schreibtisch|Eckschreibtisch|Anstelltisch,334
+Schreibtisch,334
+Eckschreibtisch,334
+Anstelltisch,334
 Computertisch,332
 Bürostuhl.*(ERGO),327
-Chefsessel.*(OFFICE|RELAX|DORADO|AIR-PORT|PORTO|FOCUS|ASTRA|ACHILLES|ZENIT|ELEGANCE|AVATAR|XXL),326
+Chefsessel,326
 Bürostuhl.*(OFFICE|STARTEC|VISTO|POINT|WEB|CITY|FLYER|SHAPE|ERNESTO|FERNANDO|CHARLES|AVIDA|GIROFLEX|NET|HEAVY),325
 Bürostuhl.*(ZERO|SOLUTION|SYDNEY|HOLA|SY|URBAN|PANDER|TEC|LAGUNA|TRAFFIC|SUMMIT|ZENIT|NETTEC|ESTRA|GENUA|RACER),325
 Orthopädischer Bürostuhl,327

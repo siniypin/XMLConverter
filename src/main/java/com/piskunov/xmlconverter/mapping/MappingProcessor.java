@@ -176,11 +176,11 @@ public class MappingProcessor implements ItemProcessor<InputData, OutputData> {
 		} else if (!StringUtils.isEmpty(rule.getSource())) {
 			String s = data.getPairs().get(rule.getSource());
 			if (!StringUtils.isEmpty(s)) {
-				resultValues.add(StringUtils.delete(s, "\""));
+				resultValues.add(StringUtils.delete(s, ";"));
 			} else if (!StringUtils.isEmpty(rule.getAltSource())) {
 				s = data.getPairs().get(rule.getAltSource());
 				if (!StringUtils.isEmpty(s)) {
-					resultValues.add(StringUtils.delete(s, "\""));
+					resultValues.add(StringUtils.delete(s, ";"));
 				}
 			}
 		} else {
@@ -211,14 +211,12 @@ public class MappingProcessor implements ItemProcessor<InputData, OutputData> {
 				if (result.length() == 0) {
 					result = "0";
 				} else {
-
 					try {
 						Float.parseFloat(result);
 					} catch (NumberFormatException e) {
 						throw new MappingException(rule, "Value type has to be " + rule.getType());
 					}
 				}
-
 			}
 
 			if (rule.getType() == null && rule.getMaxSize() != 0) {

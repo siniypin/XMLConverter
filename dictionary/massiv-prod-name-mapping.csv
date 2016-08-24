@@ -3,12 +3,17 @@ WINCHESTER Sessel,794
 ANCONA Sessel,462
 SPIRIT Sessel,462
 BANGALORE Sessel,462
-Sessel .* METRO,462
-Kommode|Eckkommode|Rollkommode|Unterkommode,784
+Sessel.*METRO,462
+Kommode,784
+Eckkommode,784
+Rollkommode,784
+Unterkommode,784
 Sideboard,786
 Longboard,785
 Wickelkommode,618
-Massivholzbett|Balkenbett|Bett,859
+Massivholzbett,859
+Balkenbett,859
+Bett,859
 Kinderbett,623
 Babybett,619
 Himmelbett,692
@@ -16,17 +21,32 @@ Wohnlandschaft,815
 Ultrasofa|Megasofa,810
 Ecksofa,812
 TV-Board,842
-Stuhl .* (Altholz|Akazie|Palisander|Vintage|Wildeiche|Kernbuche|Teakholz),462
+Stuhl.*Altholz,462
+Stuhl.*Akazie,462
+Stuhl.*Palisander,462
+Stuhl.*Vintage,462
+Stuhl.*Wildeiche,462
+Stuhl.*Kernbuche,462
+Stuhl.*Teakholz,462
 DELHI Designer Stuhl,462
 FACTORY Stuhl,460
 Freischwinger,461
 Echtlederstuhl,460
 Polsterstuhl,463
-Stuhl .* (Polster),463
-Stuhl .* (Kunstleder|Recycle Kiefer),460
+Stuhl.*Polster,463
+Stuhl.*Kunstleder,460
+Stuhl.*Recycle Kiefer,460
 Hängeschrank,782
-Schrank|Eckschrank|Unterschrank|Bücherschrank|Wohnschrank|Dielenschrank,788
+Schrank,788
+Eckschrank,788
+Unterschrank,788
+Bücherschrank,788
+Wohnschrank,788
+Dielenschrank,476
 Waschbeckenunterschrank,209
 Wäscheschrank,716
-Hochschrank|Midischrank,848
+Hochschrank,848
+Midischrank,848
 Fernsehschrank,842
+CUBUS NOVA Wandregal,489
+Kinderzimmer kompl,616

@@ -1,24 +1,71 @@
-(apierhalter|Toilettenpapier Halter|Toilettenpapier-Bevorrater|Toilettenpapier-Halter),197
-(tuchhalter|tuchreling|Handtuch-Halter|Handtuch-Reling|Handtuch-Stange|Handtuch Reling|tuchstange|tuchring|tuchreck),193
-(Wannengriff|Haltegriff|Sicherheitsgriff|Griff|Relinggriff|Möbelgriff),192
-(Haken|haken),191
+apierhalter,197
+Toilettenpapier Halter,197
+Toilettenpapier-Bevorrater,197
+Toilettenpapier-Halter,197
+tuchreling,193
+Handtuch-Halter,193
+Handtuch-Reling,193
+Handtuch-Stange,193
+Handtuch Reling,193
+tuchstange,193
+tuchring,193
+tuchreck,193
+tuchhalter,193
+Wannengriff,192
+Haltegriff,192
+Sicherheitsgriff,192
+Griff,192
+Relinggriff,192
+Möbelgriff,192
+haken,191
+Haken,191
 Seifenspender,196
-(bürste|Bürste),199
+bürste,199
+Bürste,199
 Badeteppich,206
 WC-Sitz,236
 Treteimer,194
-(Bidetarmatur|mischer für Bidet|Bidet-Einhebelmischer),13
-(Wannenfüll|Wannenrandarmatur|Wannenarmatur|Wannen-Einhebelmischer|Wannen-Thermostat|Badewannenthermostat|Wannenthermostat),189
-(Brausearmatur|Brausethermostat|Brause-Einhebelmischer|Duschthermostat|Duschbatterie|Brausearm|Brauseset),185
-(Spültischarmatur|Küchenarmatur),457
+mischer für Bidet,13
+Bidet-Einhebelmischer,13
+Bidetarmatur,13
+Wannenfüll,189
+Wannenrandarmatur,189
+Wannenarmatur,189
+Wannen-Einhebelmischer,189
+Wannen-Thermostat,189
+Badewannenthermostat,189
+Wannenthermostat,189
+Brausearmatur,185
+Brausethermostat,185
+Brause-Einhebelmischer,185
+Duschthermostat,185
+Duschbatterie,185
+Brausearm,185
+Brauseset,185
+Spültischarmatur,457
+Küchenarmatur,457
 Brausewanne,222
 Gästetuch,224
-(Handtuch|Seiftuch),225
+Handtuch,225
+Seiftuch,225
 Waschhandschuh,228
 Strandtuch,226
 Porzellanwaschtisch,23
 schlauch,188
 Kopfbrause,220
-LED-(Lampe|Lichtleiste|Innenbeleuchtung|Aufbauleuchte|Aufsatzleuchte|Leiste|Beleuchtung|Treiber|Transformator|Glasbodenbeleuchtung),17
-(lampe|Beleuchtungssatz|Beleuchtungselement|Lampe|Lichtpanel),17
+LED-Lampe,17
+LED-Lichtleiste,17
+LED-Innenbeleuchtung,17
+LED-Aufbauleuchte,17
+LED-Aufsatzleuchte,17
+LED-Leiste,17
+LED-Beleuchtung,17
+LED-Treiber,17
+LED-Transformator,17
+LED-Glasbodenbeleuchtung,17
+lampe,17
+Beleuchtungssatz,17
+Beleuchtungselement,17
+Lampe,17
+Lichtpanel,17
 Bewegungsmelder für LED,17
