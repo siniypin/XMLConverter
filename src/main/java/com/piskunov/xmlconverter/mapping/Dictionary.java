@@ -67,7 +67,8 @@ public class Dictionary {
 	}
 
 	public List<String> search(String key, boolean searchByRegExp) {
-
+		//collect all keys that match and choose one with the longest match/key
+		
 		ArrayList<String> ret = new ArrayList<>();
 
 		if (key == null)

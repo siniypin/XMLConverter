@@ -66,6 +66,7 @@
 										value="file:dictionary/badmoebel-sandbox-name-mapping.csv" />
 								</bean>
 							</property>
+							<property name="nameSource" value="Title" />
 							<property name="categoryDictionary">
 								<bean class="com.piskunov.xmlconverter.mapping.Dictionary">
 									<property name="dictionaryFile"
@@ -286,6 +287,7 @@
 										value="file:dictionary/badmoebel-prod-name-mapping.csv" />
 								</bean>
 							</property>
+							<property name="nameSource" value="Title" />
 							<property name="categoryDictionary">
 								<bean class="com.piskunov.xmlconverter.mapping.Dictionary">
 									<property name="dictionaryFile"
