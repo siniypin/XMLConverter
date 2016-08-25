@@ -422,7 +422,6 @@
 
 				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
 					<property name="target" value="marks" />
-					<property name="source" value="CF_Energieeffizienz" />
 				</bean>
 
 				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
