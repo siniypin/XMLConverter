@@ -1,0 +1,482 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:batch="http://www.springframework.org/schema/batch" xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/batch
+		http://www.springframework.org/schema/batch/spring-batch-2.2.xsd
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+
+
+	<!-- Mapping for CSV -> CSV. Required mapping properties: target: CSV column 
+		to be filled source or adapter: source XML tag to be copied to target csv 
+		colmn or appropriate adapter to calculate value Mapping rules order is essential. 
+		Current Mapping targets: category_id, name, price, alter_price, currency, 
+		delivery_price, delivery_description, image_url, deep_url, color, brand, 
+		material, width height depth cpc_bid, marks, partner_id, uid, free_delivery, 
+		immediate_delivery, has_discount -->
+
+	<!-- mapped from "ArtNumber";"Title";"Description_Short";"DisplayPrice";"Img_url";"Deeplink1"; 
+		"ProductCategoryID";"ProductCategoryName";"Price";"PricePrefix";"PriceSuffix";"Price_old"; 
+		"Keywords";"Manufacturer";"Brand";"ShippingPrefix";"ShippingSuffix";"Shipping";"DisplayShipping"; 
+		"CF_Delivery_time";"CF_Availability";"CF_preisproeinheit" -->
+
+	<!-- Job definition defaults: xml to csv input files: input/*.xml output 
+		files: output log files: logs -->
+
+	<bean id="moemaxParametersCSV2CSV" class="com.piskunov.xmlconverter.SessionParameters">
+		<property name="parameters">
+			<map>
+				<entry key="partner_id" value="7" />
+				<entry key="cpc_mm" value="200000" />
+				<entry key="sessionName" value="moemax" />
+			</map>
+		</property>
+	</bean>
+
+	<bean id="moemaxConverion" class="com.piskunov.xmlconverter.JobWrapper">
+		<property name="dataMapping" ref="moemax2csvDM" />
+		<property name="inputDataType" value="csv" />
+		<property name="inputFolder" value="input/moemax" />
+		<property name="outputFolder" value="output/sandbox" />
+		<property name="inputCSVDelimiter" value=";" />
+		<property name="sessionName"
+			value="#{moemaxParametersCSV2CSV.getProperty('sessionName')}" />
+	</bean>
+	
+	<bean id="moemaxConverionProd" class="com.piskunov.xmlconverter.JobWrapper">
+		<property name="dataMapping" ref="moemax2csvDMProd" />
+		<property name="inputDataType" value="csv" />
+		<property name="inputFolder" value="input/moemax" />
+		<property name="outputFolder" value="output/prod" />
+		<property name="inputCSVDelimiter" value=";" />
+		<property name="sessionName"
+			value="#{moemaxParametersCSV2CSV.getProperty('sessionName')}" />
+	</bean>
+
+	<bean id="moemax2csvDM" class="com.piskunov.xmlconverter.mapping.DataMapping">
+		<property name="delimiter" value=";" />
+		<property name="rules">
+			<list>
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="category_id" />
+					<property name="adapter">
+						<bean class="com.piskunov.xmlconverter.mapping.adapters.CategoryAdapter">
+							<property name="categoryDictionary">
+								<bean class="com.piskunov.xmlconverter.mapping.Dictionary">
+									<property name="dictionaryFile"
+										value="file:dictionary/moemax-sandbox-cat-mapping.csv" />
+								</bean>
+							</property>
+							<property name="categorySource" value="ProductCategoryName" />
+						</bean>
+					</property>
+					<property name="skipRecordOnError" value="true" />
+					<property name="required" value="true" />
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="name" />
+					<property name="source" value="Title" />
+					<property name="required" value="true" />
+					<property name="skipRecordOnError" value="true" />
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="price" />
+					<property name="adapter">
+						<bean class="com.piskunov.xmlconverter.mapping.adapters.PriceAdapter">
+							<property name="source" value="Price" />
+						</bean>
+					</property>
+					<property name="required" value="true" />
+					<property name="skipRecordOnError" value="true" />
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="alter_price" />
+					<property name="adapter">
+						<bean class="com.piskunov.xmlconverter.mapping.adapters.PriceAdapter">
+							<property name="source" value="Price_old" />
+						</bean>
+					</property>
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="currency" />
+					<property name="adapter">
+						<bean class="com.piskunov.xmlconverter.mapping.adapters.ValueAdapter">
+							<property name="value">
+								<list>
+									<value>EUR</value>
+								</list>
+							</property>
+						</bean>
+					</property>
+					<property name="equalsTo" value="EUR" />
+					<property name="skipRecordOnError" value="true" />
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="delivery_price" />
+					<property name="adapter">
+						<bean class="com.piskunov.xmlconverter.mapping.adapters.PriceAdapter">
+							<property name="source" value="Shipping" />
+						</bean>
+					</property>
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="delivery_description" />
+					<property name="source" value="CF_Availability" />
+					<property name="maxSize" value="300" />
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="image_url" />
+					<property name="source" value="Img_url" />
+					<property name="required" value="true" />
+					<property name="skipRecordOnError" value="true" />
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="deep_url" />
+					<property name="source" value="Deeplink1" />
+					<property name="required" value="true" />
+					<property name="skipRecordOnError" value="true" />
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="color" />
+					<property name="source" value="CF_Color" />
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="brand" />
+					<property name="source" value="Brand" />
+					<property name="maxSize" value="300" />
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="material" />
+					<property name="adapter">
+						<bean
+							class="com.piskunov.xmlconverter.mapping.adapters.SetFromValueAdapter">
+							<property name="valueSet">
+								<bean class="com.piskunov.xmlconverter.mapping.ValueSet">
+									<property name="dictionaryFile" value="file:dictionary/materials.csv" />
+								</bean>
+							</property>
+							<property name="source" value="Description" />
+						</bean>
+					</property>
+				</bean>
+				
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="width" />
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="height" />
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="depth" />
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="cpc_mm" />
+					<property name="adapter">
+						<bean
+							class="com.piskunov.xmlconverter.mapping.adapters.SimpleValueAdapter">
+							<property name="source"
+								value="#{moemaxParametersCSV2CSV.getProperty('cpc_mm')}" />
+						</bean>
+					</property>
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="marks" />
+					<!-- <property name="adapter"> <bean class="com.piskunov.xmlconverter.mapping.adapters.BooleanExpressionsAdapter"> 
+						<property name="source" value="$CF_Availability == 1" /> -> if true : available 
+						</bean> </property> -->
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="partner_id" />
+					<property name="adapter">
+						<bean
+							class="com.piskunov.xmlconverter.mapping.adapters.SimpleValueAdapter">
+							<property name="source"
+								value="#{moemaxParametersCSV2CSV.getProperty('partner_id')}" />
+						</bean>
+					</property>
+
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="uid" />
+					<property name="skipRecordOnError" value="true" />
+					<property name="adapter">
+						<bean scope="prototype"
+							class="com.piskunov.xmlconverter.mapping.adapters.UUIDGeneratorAdapter">
+							<property name="baseValue"
+								value="#{moemaxParametersCSV2CSV.getProperty('partner_id')}" />
+							<property name="baseSources">
+								<list>
+									<value>Title</value>
+									<value>ArtNumber</value>
+									<value>CF_Color</value>
+								</list>
+							</property>
+						</bean>
+					</property>
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="free_delivery" />
+					<property name="adapter">
+						<bean
+							class="com.piskunov.xmlconverter.mapping.adapters.BooleanExpressionsAdapter">
+							<property name="source" value="$Shipping == 0" />
+						</bean>
+					</property>
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="immediate_delivery" />
+					<property name="adapter">
+						<bean
+							class="com.piskunov.xmlconverter.mapping.adapters.BooleanRegExpAdapter">
+							<property name="source" value="CF_Availability" />
+							<property name="expression" value=".*(Tage).*" />
+						</bean>
+					</property>
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="has_discount" />
+					<property name="adapter">
+						<bean
+							class="com.piskunov.xmlconverter.mapping.adapters.BooleanExpressionsAdapter">
+							<property name="source" value="$Price_old more $Price" />
+						</bean>
+					</property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="moemax2csvDMProd" class="com.piskunov.xmlconverter.mapping.DataMapping">
+		<property name="delimiter" value=";" />
+		<property name="rules">
+			<list>
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="category_id" />
+					<property name="adapter">
+						<bean class="com.piskunov.xmlconverter.mapping.adapters.CategoryAdapter">
+							<property name="categoryDictionary">
+								<bean class="com.piskunov.xmlconverter.mapping.Dictionary">
+									<property name="dictionaryFile"
+										value="file:dictionary/moemax-prod-cat-mapping.csv" />
+								</bean>
+							</property>
+							<property name="categorySource" value="ProductCategoryName" />
+						</bean>
+					</property>
+					<property name="skipRecordOnError" value="true" />
+					<property name="required" value="true" />
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="name" />
+					<property name="source" value="Title" />
+					<property name="required" value="true" />
+					<property name="skipRecordOnError" value="true" />
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="price" />
+					<property name="adapter">
+						<bean class="com.piskunov.xmlconverter.mapping.adapters.PriceAdapter">
+							<property name="source" value="Price" />
+						</bean>
+					</property>
+					<property name="required" value="true" />
+					<property name="skipRecordOnError" value="true" />
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="alter_price" />
+					<property name="adapter">
+						<bean class="com.piskunov.xmlconverter.mapping.adapters.PriceAdapter">
+							<property name="source" value="Price_old" />
+						</bean>
+					</property>
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="currency" />
+					<property name="adapter">
+						<bean class="com.piskunov.xmlconverter.mapping.adapters.ValueAdapter">
+							<property name="value">
+								<list>
+									<value>EUR</value>
+								</list>
+							</property>
+						</bean>
+					</property>
+					<property name="equalsTo" value="EUR" />
+					<property name="skipRecordOnError" value="true" />
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="delivery_price" />
+					<property name="adapter">
+						<bean class="com.piskunov.xmlconverter.mapping.adapters.PriceAdapter">
+							<property name="source" value="Shipping" />
+						</bean>
+					</property>
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="delivery_description" />
+					<property name="source" value="CF_Availability" />
+					<property name="maxSize" value="300" />
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="image_url" />
+					<property name="source" value="Img_url" />
+					<property name="required" value="true" />
+					<property name="skipRecordOnError" value="true" />
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="deep_url" />
+					<property name="source" value="Deeplink1" />
+					<property name="required" value="true" />
+					<property name="skipRecordOnError" value="true" />
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="color" />
+					<property name="source" value="CF_Color" />
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="brand" />
+					<property name="source" value="Brand" />
+					<property name="maxSize" value="300" />
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="material" />
+					<property name="adapter">
+						<bean
+							class="com.piskunov.xmlconverter.mapping.adapters.SetFromValueAdapter">
+							<property name="valueSet">
+								<bean class="com.piskunov.xmlconverter.mapping.ValueSet">
+									<property name="dictionaryFile" value="file:dictionary/materials.csv" />
+								</bean>
+							</property>
+							<property name="source" value="Description" />
+						</bean>
+					</property>
+				</bean>
+				
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="width" />
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="height" />
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="depth" />
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="cpc_mm" />
+					<property name="adapter">
+						<bean
+							class="com.piskunov.xmlconverter.mapping.adapters.SimpleValueAdapter">
+							<property name="source"
+								value="#{moemaxParametersCSV2CSV.getProperty('cpc_mm')}" />
+						</bean>
+					</property>
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="marks" />
+					<!-- <property name="adapter"> <bean class="com.piskunov.xmlconverter.mapping.adapters.BooleanExpressionsAdapter"> 
+						<property name="source" value="$CF_Availability == 1" /> -> if true : available 
+						</bean> </property> -->
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="partner_id" />
+					<property name="adapter">
+						<bean
+							class="com.piskunov.xmlconverter.mapping.adapters.SimpleValueAdapter">
+							<property name="source"
+								value="#{moemaxParametersCSV2CSV.getProperty('partner_id')}" />
+						</bean>
+					</property>
+
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="uid" />
+					<property name="skipRecordOnError" value="true" />
+					<property name="adapter">
+						<bean scope="prototype"
+							class="com.piskunov.xmlconverter.mapping.adapters.UUIDGeneratorAdapter">
+							<property name="baseValue"
+								value="#{moemaxParametersCSV2CSV.getProperty('partner_id')}" />
+							<property name="baseSources">
+								<list>
+									<value>Title</value>
+									<value>ArtNumber</value>
+									<value>CF_Color</value>
+								</list>
+							</property>
+						</bean>
+					</property>
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="free_delivery" />
+					<property name="adapter">
+						<bean
+							class="com.piskunov.xmlconverter.mapping.adapters.BooleanExpressionsAdapter">
+							<property name="source" value="$Shipping == 0" />
+						</bean>
+					</property>
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="immediate_delivery" />
+					<property name="adapter">
+						<bean
+							class="com.piskunov.xmlconverter.mapping.adapters.BooleanRegExpAdapter">
+							<property name="source" value="CF_Availability" />
+							<property name="expression" value=".*(Tage).*" />
+						</bean>
+					</property>
+				</bean>
+
+				<bean class="com.piskunov.xmlconverter.mapping.MappingRule">
+					<property name="target" value="has_discount" />
+					<property name="adapter">
+						<bean
+							class="com.piskunov.xmlconverter.mapping.adapters.BooleanExpressionsAdapter">
+							<property name="source" value="$Price_old more $Price" />
+						</bean>
+					</property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+</beans>
