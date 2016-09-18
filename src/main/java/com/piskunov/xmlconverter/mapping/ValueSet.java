@@ -43,7 +43,7 @@ public class ValueSet {
         String[] words = s.split(" ");
 
         for (String word : words){
-            if (set.contains(word)){
+            if (set.contains(word) && !result.contains(word)){
                 result.add(word);
             }
         }
