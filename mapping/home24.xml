@@ -22,6 +22,16 @@
 
 	<!-- Job definition defaults: xml to csv input files: input/*.xml output 
 		files: output log files: logs -->
+
+	<bean id="home24Converion" class="com.piskunov.xmlconverter.JobWrapper">
+		<property name="dataMapping" ref="home242csvDM" />
+		<property name="inputDataType" value="csv" />
+		<property name="inputFolder" value="input/home24" />
+		<property name="outputFolder" value="output/${env}" />
+		<property name="inputCSVDelimiter" value=";" />
+		<property name="sessionName" value="home24" />
+	</bean>
+
 	<bean id="home24ParametersCSV2CSV" class="com.piskunov.xmlconverter.SessionParameters">
 		<property name="parameters">
 			<map>

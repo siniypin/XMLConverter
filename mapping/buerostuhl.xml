@@ -18,6 +18,16 @@
 
 	<!-- Job definition defaults: xml to csv input files: input/*.xml output 
 		files: output log files: logs -->
+	<bean id="buerostuhlConverion" class="com.piskunov.xmlconverter.JobWrapper">
+		<property name="dataMapping" ref="buerostuhl2csvDM" />
+		<property name="inputDataType" value="csv" />
+		<property name="inputFolder" value="input/buerostuhl" />
+		<property name="outputFolder" value="output/${env}" />
+		<property name="inputCSVDelimiter" value=";" />
+		<property name="sessionName" value="buerostuhl" />
+	</bean>
+
+
 	<bean id="buerostuhlParametersCSV2CSV" class="com.piskunov.xmlconverter.SessionParameters">
 		<property name="parameters">
 			<map>

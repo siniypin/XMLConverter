@@ -20,6 +20,15 @@
 	<!-- Job definition defaults: xml to csv input files: input/*.xml output 
 		files: output log files: logs -->
 
+	<bean id="moebelgalerieConverion" class="com.piskunov.xmlconverter.JobWrapper">
+		<property name="dataMapping" ref="moebelgalerie2csvDM" />
+		<property name="inputDataType" value="csv" />
+		<property name="inputFolder" value="input/moebelgalerie" />
+		<property name="outputFolder" value="output/${env}" />
+		<property name="inputCSVDelimiter" value=";" />
+		<property name="sessionName" value="moebelgalerie" />
+	</bean>
+
 	<bean id="moebelgalerieParametersCSV2CSV" class="com.piskunov.xmlconverter.SessionParameters">
 		<property name="parameters">
 			<map>

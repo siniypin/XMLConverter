@@ -19,6 +19,16 @@
 
 	<!-- Job definition defaults: xml to csv input files: input/*.xml output 
 		files: output log files: logs -->
+
+	<bean id="badmoebelConverion" class="com.piskunov.xmlconverter.JobWrapper">
+		<property name="dataMapping" ref="badmoebel2csvDM" />
+		<property name="inputDataType" value="csv" />
+		<property name="inputFolder" value="input/badmoebel" />
+		<property name="outputFolder" value="output/${env}" />
+		<property name="inputCSVDelimiter" value=";" />
+		<property name="sessionName" value="badmoebel" />
+	</bean>
+
 	<bean id="badmoebelParametersCSV2CSV" class="com.piskunov.xmlconverter.SessionParameters">
 		<property name="parameters">
 			<map>
