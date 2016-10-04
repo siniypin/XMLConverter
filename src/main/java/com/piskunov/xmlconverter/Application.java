@@ -15,14 +15,10 @@ public class Application {
 
         JobLauncher launcher = context.getBean(JobLauncher.class);
 
-        String allowedSessions = args.length > 0 ? args[0] : null;
-
         for (JobWrapper jobWrapper : context.getBeansOfType(JobWrapper.class).values()) {
-            if (allowedSessions == null || jobWrapper.getSessionName().startsWith(allowedSessions)) {
-                Job job = jobWrapper.getJob();
-                if (job != null) {
-                    launcher.run(job, new JobParameters());
-                }
+            Job job = jobWrapper.getJob();
+            if (job != null) {
+                launcher.run(job, new JobParameters());
             }
         }
     }
