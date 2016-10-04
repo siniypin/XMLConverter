@@ -23,7 +23,7 @@
 	<bean id="massivConverion" class="com.piskunov.xmlconverter.JobWrapper">
 		<property name="dataMapping" ref="massiv2csvDM" />
 		<property name="inputDataType" value="csv" />
-		<property name="inputFolder" value="input/massive" />
+		<property name="inputFolder" value="input/massiv" />
 		<property name="outputFolder" value="output/${env}" />
 		<property name="inputCSVDelimiter" value=";" />
 		<property name="sessionName" value="massive" />
