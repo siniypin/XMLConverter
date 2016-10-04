@@ -26,7 +26,7 @@
 		<property name="inputFolder" value="input/massiv" />
 		<property name="outputFolder" value="output/${env}" />
 		<property name="inputCSVDelimiter" value=";" />
-		<property name="sessionName" value="massive" />
+		<property name="sessionName" value="massiv" />
 	</bean>
 
 	<bean id="massivParametersCSV2CSV" class="com.piskunov.xmlconverter.SessionParameters">

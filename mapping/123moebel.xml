@@ -51,14 +51,14 @@
 							<property name="nameDictionary">
 								<bean class="com.piskunov.xmlconverter.mapping.Dictionary">
 									<property name="dictionaryFile"
-										value="file:dictionary/123moebel-sandbox-name-mapping.csv" />
+										value="file:dictionary/123moebel-${env}-name-mapping.csv" />
 								</bean>
 							</property>
 							<property name="nameSource" value="Title" />
 							<property name="categoryDictionary">
 								<bean class="com.piskunov.xmlconverter.mapping.Dictionary">
 									<property name="dictionaryFile"
-										value="file:dictionary/123moebel-sandbox-cat-mapping.csv" />
+										value="file:dictionary/123moebel-${env}-cat-mapping.csv" />
 								</bean>
 							</property>
 							<property name="categorySource" value="ProductCategoryName" />
