@@ -46,6 +46,13 @@
                     <property name="target" value="category_id"/>
                     <property name="adapter">
                         <bean class="com.piskunov.xmlconverter.mapping.adapters.CategoryAdapter">
+                        	<property name="nameDictionary">
+								<bean class="com.piskunov.xmlconverter.mapping.Dictionary">
+									<property name="dictionaryFile"
+										value="file:dictionary/moemax-${env}-name-mapping.csv" />
+								</bean>
+							</property>
+							<property name="nameSource" value="Title" />
                             <property name="categoryDictionary">
                                 <bean class="com.piskunov.xmlconverter.mapping.Dictionary">
                                     <property name="dictionaryFile"
