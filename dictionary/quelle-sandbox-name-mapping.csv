@@ -17,7 +17,7 @@ Chefsessel,326
 Bürostuhl,325
 Drehstuhl,325
 Bürodrehstuhl,325
-Garnitur,819
+Garnitur.*Sitzer,819
 5-Sitzer,770
 Schwingstühle,462
 Polsterstuhl,464
@@ -48,7 +48,7 @@ Boxspringbett,688
 Sockelblendenset,1111
 Winkel-Küchenzeile,428
 Singleküche,427
-opfkissen,579
+Kopfkissen,579
 Babybettwäsche,646
 Spar-Set.*Wickelkommode,617
 Etagenbett,622
@@ -59,3 +59,8 @@ Kombikommode,712
 Chesterfield Sofa,814
 3.*-Sitzer,769
 2.*-Sitzer,769
+Ottomane,799
+Chesterfield Sessel,792
+Polster-Garnitur,819
+"Garnitur, Cotta",819
+Sit&More Garnitur,819
