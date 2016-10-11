@@ -23,11 +23,7 @@ public class MappingException extends Exception {
         errorID = getNextID();
     }
 
-    public MappingException(MappingRule rule, String msg) {
-        this("Mapping error: " + msg + " ID" + getID() + " TargetField: " + rule.getTarget() + " Source: " + rule.getSource() + " Adapter: " + rule.getAdapter().getClass().getSimpleName());
-    }
-
     public int getErrorID() {
-        return errorID;
-    }
+		return errorID;
+	}
 }

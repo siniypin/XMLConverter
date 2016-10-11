@@ -191,18 +191,35 @@ public class MappingProcessor implements ItemProcessor<InputData, OutputData> {
 
 		// check required rule
 		if (rule.isRequired() && resultValues.size() == 0) {
-			throw new MappingException(rule, "Not empty value is required.");
+			StringBuilder sb = new StringBuilder();
+			sb.append("Mapping error: Not empty value is required.").append(" TargetField: ").append(rule.getTarget());
+			if (rule.getAdapter() != null) {
+				sb.append(" Adapter: ").append(rule.getAdapter().getClass().getSimpleName());
+			}
+			throw new MappingException(sb.toString());
 		}
 
 		for (String result : resultValues) {
 
 			if (rule.isRequired() && result.length() == 0) {
-				throw new MappingException(rule, "Not empty value is required.");
+				StringBuilder sb = new StringBuilder();
+				sb.append("Mapping error: Not empty value is required.").append(" TargetField: ")
+						.append(rule.getTarget());
+				if (rule.getAdapter() != null) {
+					sb.append(" Adapter: ").append(rule.getAdapter().getClass().getSimpleName());
+				}
+				throw new MappingException(sb.toString());
 			}
 
 			// check equal rule
 			if (rule.getEqualsTo() != null && !result.equals(rule.getEqualsTo())) {
-				throw new MappingException(rule, "Value has to be equals to " + rule.getEqualsTo());
+				StringBuilder sb = new StringBuilder();
+				sb.append("Mapping error: Value has to be equal to ").append(rule.getEqualsTo())
+						.append(" TargetField: ").append(rule.getTarget());
+				if (rule.getAdapter() != null) {
+					sb.append(" Adapter: ").append(rule.getAdapter().getClass().getSimpleName());
+				}
+				throw new MappingException(sb.toString());
 			}
 
 			//
@@ -214,7 +231,13 @@ public class MappingProcessor implements ItemProcessor<InputData, OutputData> {
 					try {
 						Float.parseFloat(result);
 					} catch (NumberFormatException e) {
-						throw new MappingException(rule, "Value type has to be " + rule.getType());
+						StringBuilder sb = new StringBuilder();
+						sb.append("Mapping error: Value type has to be ").append(rule.getType())
+								.append(" TargetField: ").append(rule.getTarget());
+						if (rule.getAdapter() != null) {
+							sb.append(" Adapter: ").append(rule.getAdapter().getClass().getSimpleName());
+						}
+						throw new MappingException(sb.toString());
 					}
 				}
 			}
@@ -222,7 +245,13 @@ public class MappingProcessor implements ItemProcessor<InputData, OutputData> {
 			if (rule.getType() == null && rule.getMaxSize() != 0) {
 
 				if (result.length() > rule.getMaxSize()) {
-					throw new MappingException(rule, "Value lenth is greater than maximum " + rule.getMaxSize());
+					StringBuilder sb = new StringBuilder();
+					sb.append("Mapping error: Value lenth is greater than maximum ").append(rule.getMaxSize())
+							.append(" TargetField: ").append(rule.getTarget());
+					if (rule.getAdapter() != null) {
+						sb.append(" Adapter: ").append(rule.getAdapter().getClass().getSimpleName());
+					}
+					throw new MappingException(sb.toString());
 				}
 
 			}
