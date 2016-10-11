@@ -1,6 +1,7 @@
 package com.piskunov.xmlconverter.mapping;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,10 +70,11 @@ public class Dictionary {
 	public List<String> search(String key, boolean searchByRegExp) {
 		// collect all keys that match and choose one with the longest match/key
 
-		Map<Integer, String> ret = new HashMap<>();
+		String result = null;
+		int matchLength = 0;
 
 		if (key == null)
-			return new ArrayList<>();
+			return Collections.emptyList();
 
 		if (!searchByRegExp) {
 			return dictionary.get(key);
@@ -85,19 +87,16 @@ public class Dictionary {
 				keyPatterns.put(dictionaryKey, pattern);
 			}
 			Matcher matcher = pattern.matcher(key);
-			if (matcher.find()) {
-				ret.put(matcher.end() - matcher.start(), dictionary.get(dictionaryKey).get(0));
+			if (matcher.find() && matcher.end() - matcher.start() > matchLength) {
+				matchLength = matcher.end() - matcher.start();
+				result = dictionary.get(dictionaryKey).get(0);
 			}
 		}
 
-		if (ret.keySet().isEmpty()) {
-			return new ArrayList<>();
+		if (result == null) {
+			return Collections.emptyList();
 		} else {
-			return new ArrayList<String>() {
-				{
-					ret.get(ret.keySet().stream().max(Integer::compare).get());
-				}
-			};
+			return Collections.nCopies(1, result);
 		}
 	}
 }
