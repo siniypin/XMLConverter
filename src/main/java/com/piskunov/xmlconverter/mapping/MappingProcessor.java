@@ -140,7 +140,7 @@ public class MappingProcessor implements ItemProcessor<InputData, OutputData> {
 			}
 
 			output = new BufferedWriter(new FileWriter(file, true));
-			output.append(e.getMessage() + "\n");
+			//output.append(e.getMessage() + "\n");
 			output.append(line + "\n");
 
 		} catch (IOException ioe) {
