@@ -1,0 +1,14 @@
+spring:
+  profiles.active: echo-test
+  batch.job.enabled: false
+logging:
+  file: logs/application.log
+  level:
+    root: WARN
+---
+spring:
+  profiles: echo-test
+  datasource:
+    url: 'jdbc:postgresql://localhost/agg_development'
+    username: 'echo'
+    driverClassName: org.postgresql.Driver

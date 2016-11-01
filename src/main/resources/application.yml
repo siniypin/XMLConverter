@@ -1,0 +1,10 @@
+spring:
+  profiles.active: echo-dev
+  batch.job.enabled: false
+logging:
+  file: logs/application.log
+  level:
+    root: WARN
+---
+spring:
+  profiles: echo-dev
