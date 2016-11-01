@@ -28,6 +28,11 @@
             <artifactId>spring-boot-starter-batch</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-search-orm</artifactId>
+        </dependency>
+
         <!-- Spring XML to/back object -->
         <dependency>
             <groupId>org.springframework</groupId>
