@@ -1,5 +1,7 @@
 spring:
   profiles.active: echo-test
+  batch:
+    job.enabled: false
 logging:
   file: logs/application.log
   level:
@@ -16,4 +18,3 @@ spring:
     hibernate.search:
       default.indexBase: /Users/echo/Work/tools/data/xmlconverter
 env: prod
-task: convert
