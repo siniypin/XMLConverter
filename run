@@ -1,8 +1,8 @@
-#!/bin/sh
+#!/bin/bash
 
 cd "$(dirname "$0")"
 
-JAR=$(ls | grep '\<xmlconverter.*\.jar\>')
+JAR=xmlconverter-0.0.1.jar
 
 if [ -f ./$JAR ]; then
 	java -jar $JAR $@ &

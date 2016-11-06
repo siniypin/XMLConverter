@@ -3,6 +3,7 @@ package com.piskunov.xmlconverter.mapping.adapters;
 import java.util.Collections;
 import java.util.List;
 
+import com.piskunov.xmlconverter.categorizer.CategorizingService;
 import org.springframework.util.StringUtils;
 
 import com.piskunov.xmlconverter.mapping.Dictionary;
@@ -20,6 +21,8 @@ public class CategoryAdapter extends BaseMappingAdapter {
     private String categorySource;
     private String secondaryCategorySource;
     private String nameSource;
+    private String descriptionSource;
+    private CategorizingService categorizingService;
 
     public String getCategorySource() {
         return categorySource;
@@ -53,12 +56,28 @@ public class CategoryAdapter extends BaseMappingAdapter {
 		this.secondaryCategorySource = secondaryCategorySource;
 	}
 
-	public Dictionary getNameDictionary() {
+    public CategorizingService getCategorizingService() {
+        return categorizingService;
+    }
+
+    public void setCategorizingService(CategorizingService categorizingService) {
+        this.categorizingService = categorizingService;
+    }
+
+    public Dictionary getNameDictionary() {
         return nameDictionary;
     }
 
     public void setNameDictionary(Dictionary nameDictionary) {
         this.nameDictionary = nameDictionary;
+    }
+
+    public String getDescriptionSource() {
+        return descriptionSource;
+    }
+
+    public void setDescriptionSource(String descriptionSource) {
+        this.descriptionSource = descriptionSource;
     }
 
     @Override
@@ -79,7 +98,20 @@ public class CategoryAdapter extends BaseMappingAdapter {
         String key = getCategoryKey(data);
         resultValues = categoryDictionary.search(key, false);
 
-        return resultValues != null ? resultValues : Collections.emptyList();
+        if (resultValues != null && !resultValues.isEmpty()){
+            return resultValues;
+        }
+
+        if (descriptionSource !=null && categorizingService != null){
+            String description = data.getPairs().get(descriptionSource);
+
+            Integer categoryId = categorizingService.findCategory(description);
+            if (categoryId != null){
+                return Collections.singletonList(String.valueOf(categoryId));
+            }
+        }
+
+        return Collections.emptyList();
     }
     
     private String getCategoryKey(InputData data){

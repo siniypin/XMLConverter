@@ -1,0 +1,20 @@
+spring:
+  profiles.active: echo-dev
+  batch:
+    job.enabled: false
+  jpa.properties:
+    hibernate.search:
+      default.indexBase: ./
+      default.directory_provider: filesystem
+      indexing_strategy: manual
+logging:
+  file: logs/application.log
+  level:
+    root: WARN
+    com.piskunov: INFO
+---
+spring:
+  profiles: echo-dev
+  jpa.properties:
+    hibernate.search:
+      default.indexBase: /Users/echo/Work/tools/data/xmlconverter
