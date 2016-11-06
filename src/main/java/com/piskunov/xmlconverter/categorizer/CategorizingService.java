@@ -1,6 +1,5 @@
 package com.piskunov.xmlconverter.categorizer;
 
-import com.piskunov.xmlconverter.model.Category;
 import com.piskunov.xmlconverter.model.Product;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.logging.Log;
@@ -11,9 +10,6 @@ import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.FullTextQuery;
 import org.hibernate.search.jpa.Search;
 import org.hibernate.search.query.dsl.QueryBuilder;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -29,8 +25,10 @@ import static java.util.stream.Collectors.toMap;
  * Created by echo on 02/11/2016.
  */
 @Service
-public class CategorizingService implements ApplicationContextAware {
+public class CategorizingService {
     private static final int MAX_PRODUCTS = 20;
+    private static final int MIN_DESCRIPTION_SIZE = 20;
+    private static final float MIN_SCORE_DIF = 0.3f;
     private final static Log log = LogFactory.getLog(CategorizingService.class);
     private final static String MISSING_CATEGORY_IDS_QUERY =
             "SELECT DISTINCT p.category_id " +
@@ -41,29 +39,30 @@ public class CategorizingService implements ApplicationContextAware {
     @PersistenceContext
     private EntityManager entityManager;
 
-    private CategorizingService self;
-
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.self = applicationContext.getBean(CategorizingService.class);
-    }
+//    private CategorizingService self;
+//
+//    @Override
+//    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+//        this.self = applicationContext.getBean(CategorizingService.class);
+//    }
 
     public void rebuildAll() throws InterruptedException {
 //        self.createMissingCategories();
-        self.reindex();
+//        self.
+          reindex();
     }
 
 //    @Transactional
-    public void createMissingCategories() {
-        log.info("Looking for missing categories...");
-        List<Integer> missingIds = entityManager.createNativeQuery(MISSING_CATEGORY_IDS_QUERY).getResultList();
-
-        missingIds.stream()
-                .map(Category::new)
-                .forEach(entityManager::merge);
-
-        log.info("Created " + missingIds.size() + "missing categories...");
-    }
+//    public void createMissingCategories() {
+//        log.info("Looking for missing categories...");
+//        List<Integer> missingIds = entityManager.createNativeQuery(MISSING_CATEGORY_IDS_QUERY).getResultList();
+//
+//        missingIds.stream()
+//                .map(Category::new)
+//                .forEach(entityManager::merge);
+//
+//        log.info("Created " + missingIds.size() + "missing categories...");
+//    }
 
     public void reindex() throws InterruptedException {
         FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
@@ -71,6 +70,30 @@ public class CategorizingService implements ApplicationContextAware {
         log.info("Reindexing entities...");
         fullTextEntityManager.createIndexer().purgeAllOnStart(true).startAndWait();
         log.info("Reindexing finished...");
+    }
+
+    public Integer findCategory(String description){
+        if (description == null || description.isEmpty()){
+            log.warn("Empty description for category search...");
+            return null;
+        }
+
+        if (description.length() < MIN_DESCRIPTION_SIZE){
+            log.warn("Very short description: " + description);
+        }
+
+        List<Pair<Integer, Float>> results = findCategoriesAlikeByProduct(description);
+
+        if (results.isEmpty()){
+            log.warn("No category matching: " + description);
+        }
+
+        if (results.size() > 1 && results.get(0).getRight() - results.get(1).getRight() < MIN_SCORE_DIF){
+            log.warn("Ambiguous category matching: " + description
+                    + "\nresults are almost even: " + results.get(0) + " vs " + results.get(1));
+        }
+
+        return results.get(0).getLeft();
     }
 
     public List<Pair<Integer, Float>> findCategoriesAlikeByProduct(String description) {

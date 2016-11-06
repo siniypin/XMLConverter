@@ -59,6 +59,8 @@
 								</bean>
 							</property>
 							<property name="categorySource" value="ProductCategoryName" />
+                            <property name="descriptionSource" value="Description"/>
+							<property name="categorizingService" ref="categorizingService" />
 						</bean>
 					</property>
 					<property name="skipRecordOnError" value="true" />
