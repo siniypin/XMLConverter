@@ -1,10 +1,9 @@
 spring:
   profiles.active: echo-test
-  batch.job.enabled: false
 logging:
   file: logs/application.log
   level:
-    root: WARN
+    root: INFO
 ---
 spring:
   profiles: echo-test
@@ -12,3 +11,7 @@ spring:
     url: 'jdbc:postgresql://localhost/agg_development'
     username: 'echo'
     driverClassName: org.postgresql.Driver
+  jpa.properties:
+    hibernate.search:
+      default.indexBase: /Users/echo/Work/tools/data/xmlconverter
+env: prod

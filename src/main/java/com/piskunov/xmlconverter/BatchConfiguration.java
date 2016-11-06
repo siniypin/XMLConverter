@@ -30,6 +30,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.oxm.Unmarshaller;
 import org.springframework.oxm.xstream.XStreamMarshaller;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -42,6 +43,7 @@ import java.util.List;
 
 @Configuration
 @EnableBatchProcessing
+@EnableTransactionManagement(proxyTargetClass = true)
 @ImportResource("file:mapping/*.xml")
 public class BatchConfiguration {
     private static final String SESSION_KEY = "session";

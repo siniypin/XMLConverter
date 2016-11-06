@@ -1,8 +1,11 @@
 package com.piskunov.xmlconverter.model;
 
 import com.aggregator.common.model.BaseEntity;
-import org.hibernate.search.annotations.Field;
-import org.hibernate.search.annotations.Indexed;
+import org.apache.lucene.analysis.core.LowerCaseFilterFactory;
+import org.apache.lucene.analysis.de.GermanStemFilterFactory;
+import org.apache.lucene.analysis.snowball.SnowballPorterFilterFactory;
+import org.apache.lucene.analysis.standard.StandardTokenizerFactory;
+import org.hibernate.search.annotations.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,19 +16,36 @@ import javax.persistence.Table;
  */
 @Entity
 @Indexed
+@AnalyzerDefs({
+        @AnalyzerDef(name = "german",
+                tokenizer = @TokenizerDef(factory = StandardTokenizerFactory.class),
+                filters = {
+                        @TokenFilterDef(factory = LowerCaseFilterFactory.class),
+                        @TokenFilterDef(factory = SnowballPorterFilterFactory.class, params = {
+                                @Parameter(name = "language", value = "German")
+                        })
+                }),
+        @AnalyzerDef(name = "de",
+                tokenizer = @TokenizerDef(factory = StandardTokenizerFactory.class),
+                filters = {
+                        @TokenFilterDef(factory = LowerCaseFilterFactory.class),
+                        @TokenFilterDef(factory = GermanStemFilterFactory.class)
+                })
+})
+
 @Table(schema = "xmlconverter", name = "products")
 public class Product extends BaseEntity {
+    @Field(index = Index.NO, analyze = Analyze.NO, store = Store.YES)
     @Column(name = "category_id")
     private int categoryId;
 
-    @Field
     @Column(name = "name")
     private String name;
 
-    @Field
+    @Field(index = Index.YES, analyze = Analyze.YES, termVector = TermVector.YES, store = Store.NO)
+    @Analyzer(definition = "german")
     @Column(name = "description")
     private String description;
-
 
     public int getCategoryId() {
         return categoryId;
