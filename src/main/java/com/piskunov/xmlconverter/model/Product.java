@@ -2,8 +2,8 @@ package com.piskunov.xmlconverter.model;
 
 import com.aggregator.common.model.BaseEntity;
 import org.apache.lucene.analysis.core.LowerCaseFilterFactory;
+import org.apache.lucene.analysis.core.StopFilterFactory;
 import org.apache.lucene.analysis.de.GermanStemFilterFactory;
-import org.apache.lucene.analysis.snowball.SnowballPorterFilterFactory;
 import org.apache.lucene.analysis.standard.StandardTokenizerFactory;
 import org.hibernate.search.annotations.*;
 
@@ -17,18 +17,20 @@ import javax.persistence.Table;
 @Entity
 @Indexed
 @AnalyzerDefs({
-        @AnalyzerDef(name = "german",
-                tokenizer = @TokenizerDef(factory = StandardTokenizerFactory.class),
-                filters = {
-                        @TokenFilterDef(factory = LowerCaseFilterFactory.class),
-                        @TokenFilterDef(factory = SnowballPorterFilterFactory.class, params = {
-                                @Parameter(name = "language", value = "German")
-                        })
-                }),
         @AnalyzerDef(name = "de",
                 tokenizer = @TokenizerDef(factory = StandardTokenizerFactory.class),
                 filters = {
                         @TokenFilterDef(factory = LowerCaseFilterFactory.class),
+//                        @TokenFilterDef(factory = StopFilterFactory.class, params = {
+//                                @Parameter(name = "words", value = "org/apache/lucene/analysis/snowball/german_stop.txt"),
+//                                @Parameter(name = "format", value = StopFilterFactory.FORMAT_SNOWBALL),
+//                                @Parameter(name = "ignoreCase", value = "true")
+//                        }),
+                        @TokenFilterDef(factory = StopFilterFactory.class, params = {
+                                @Parameter(name = "words", value = "german.stop"),
+                                @Parameter(name = "format", value = StopFilterFactory.FORMAT_WORDSET),
+                                @Parameter(name = "ignoreCase", value = "true")
+                        }),
                         @TokenFilterDef(factory = GermanStemFilterFactory.class)
                 })
 })
@@ -43,9 +45,13 @@ public class Product extends BaseEntity {
     private String name;
 
     @Field(index = Index.YES, analyze = Analyze.YES, termVector = TermVector.YES, store = Store.NO)
-    @Analyzer(definition = "german")
+    @Analyzer(definition = "de")
     @Column(name = "description")
     private String description;
+
+//    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+//    @JoinColumn(name = "category_id", nullable = false, updatable = false, insertable = false)
+//    private Category category;
 
     public int getCategoryId() {
         return categoryId;
@@ -70,4 +76,12 @@ public class Product extends BaseEntity {
     public void setDescription(String description) {
         this.description = description;
     }
+
+//    public Category getCategory() {
+//        return category;
+//    }
+//
+//    public void setCategory(Category category) {
+//        this.category = category;
+//    }
 }

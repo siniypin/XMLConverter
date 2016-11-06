@@ -1,6 +1,7 @@
 spring:
   profiles.active: echo-dev
-  batch.job.enabled: false
+  batch:
+    job.enabled: false
   jpa.properties:
     hibernate.search:
       default.directory_provider: filesystem
@@ -8,7 +9,8 @@ spring:
 logging:
   file: logs/application.log
   level:
-    root: INFO
+    root: WARN
+    com.piskunov: INFO
 ---
 spring:
   profiles: echo-dev

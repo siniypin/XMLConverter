@@ -1,6 +1,9 @@
 package com.piskunov.xmlconverter;
 
-import com.piskunov.xmlconverter.mapping.*;
+import com.piskunov.xmlconverter.mapping.InputData;
+import com.piskunov.xmlconverter.mapping.MappingProcessor;
+import com.piskunov.xmlconverter.mapping.MappingStatistics;
+import com.piskunov.xmlconverter.mapping.OutputData;
 import com.piskunov.xmlconverter.unmarshal.CSVLineMapper;
 import com.piskunov.xmlconverter.unmarshal.XMLUnmarshaller;
 import com.thoughtworks.xstream.converters.Converter;
@@ -8,6 +11,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.configuration.annotation.DefaultBatchConfigurer;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
@@ -22,20 +26,15 @@ import org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor;
 import org.springframework.batch.item.file.transform.DelimitedLineAggregator;
 import org.springframework.batch.item.xml.StaxEventItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.oxm.Unmarshaller;
 import org.springframework.oxm.xstream.XStreamMarshaller;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import javax.sql.DataSource;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by Vladimir Piskunov on 2/27/16.
@@ -43,9 +42,8 @@ import java.util.List;
 
 @Configuration
 @EnableBatchProcessing
-@EnableTransactionManagement(proxyTargetClass = true)
 @ImportResource("file:mapping/*.xml")
-public class BatchConfiguration {
+public class BatchConfiguration extends DefaultBatchConfigurer {
     private static final String SESSION_KEY = "session";
 
     private final static Log log = LogFactory.getLog(BatchConfiguration.class);
@@ -55,6 +53,9 @@ public class BatchConfiguration {
 
     @Autowired
     public StepBuilderFactory stepBuilderFactory;
+
+    @Override
+    public void setDataSource(DataSource dataSource) {}
 
     @Bean
     public MultiResourceItemReader dataSourceReader() throws IOException {
@@ -137,5 +138,4 @@ public class BatchConfiguration {
     MappingStatistics mappingStatistics() {
         return new MappingStatistics();
     }
-
 }

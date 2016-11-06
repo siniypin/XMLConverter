@@ -1,6 +1,6 @@
 package com.piskunov.xmlconverter;
 
-import com.piskunov.xmlconverter.search.SearchService;
+import com.piskunov.xmlconverter.categorizer.CategorizingService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.batch.core.Job;
@@ -10,11 +10,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.ApplicationContext;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import static com.aggregator.common.ApplicationUtil.prepareArgs;
 
 
 @EntityScan(basePackages = {"com.piskunov.xmlconverter.model"})
+@EnableTransactionManagement
 @SpringBootApplication
 public class Application {
     private static final String ENV_KEY = "env";
@@ -37,7 +39,7 @@ public class Application {
 
         String session = context.getEnvironment().getProperty(SESSION_KEY);
 
-        context.getBean(SearchService.class).index();
+        context.getBean(CategorizingService.class).rebuildAll();
 
         for (JobWrapper jobWrapper : context.getBeansOfType(JobWrapper.class).values()) {
             if (session != null && !session.equals(jobWrapper.getSessionName())) {

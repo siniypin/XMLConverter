@@ -3,7 +3,8 @@ spring:
 logging:
   file: logs/application.log
   level:
-    root: INFO
+    root: WARN
+    com.piskunov: INFO
 ---
 spring:
   profiles: echo-test
@@ -15,3 +16,4 @@ spring:
     hibernate.search:
       default.indexBase: /Users/echo/Work/tools/data/xmlconverter
 env: prod
+task: convert
