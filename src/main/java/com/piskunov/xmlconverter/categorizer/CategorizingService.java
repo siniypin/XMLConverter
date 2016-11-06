@@ -1,5 +1,6 @@
 package com.piskunov.xmlconverter.categorizer;
 
+import com.piskunov.xmlconverter.model.Category;
 import com.piskunov.xmlconverter.model.Product;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.logging.Log;
@@ -10,7 +11,11 @@ import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.FullTextQuery;
 import org.hibernate.search.jpa.Search;
 import org.hibernate.search.query.dsl.QueryBuilder;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -25,7 +30,7 @@ import static java.util.stream.Collectors.toMap;
  * Created by echo on 02/11/2016.
  */
 @Service
-public class CategorizingService {
+public class CategorizingService implements ApplicationContextAware{
     private static final int MAX_PRODUCTS = 20;
     private static final int MIN_DESCRIPTION_SIZE = 20;
     private static final float MIN_SCORE_DIF = 0.3f;
@@ -39,30 +44,29 @@ public class CategorizingService {
     @PersistenceContext
     private EntityManager entityManager;
 
-//    private CategorizingService self;
-//
-//    @Override
-//    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-//        this.self = applicationContext.getBean(CategorizingService.class);
-//    }
+    private CategorizingService self;
 
-    public void rebuildAll() throws InterruptedException {
-//        self.createMissingCategories();
-//        self.
-          reindex();
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.self = applicationContext.getBean(CategorizingService.class);
     }
 
-//    @Transactional
-//    public void createMissingCategories() {
-//        log.info("Looking for missing categories...");
-//        List<Integer> missingIds = entityManager.createNativeQuery(MISSING_CATEGORY_IDS_QUERY).getResultList();
-//
-//        missingIds.stream()
-//                .map(Category::new)
-//                .forEach(entityManager::merge);
-//
-//        log.info("Created " + missingIds.size() + "missing categories...");
-//    }
+    public void rebuildAll() throws InterruptedException {
+        self.createMissingCategories();
+        self.reindex();
+    }
+
+    @Transactional
+    public void createMissingCategories() {
+        log.info("Looking for missing categories...");
+        List<Integer> missingIds = entityManager.createNativeQuery(MISSING_CATEGORY_IDS_QUERY).getResultList();
+
+        missingIds.stream()
+                .map(Category::new)
+                .forEach(entityManager::merge);
+
+        log.info("Created " + missingIds.size() + " missing categories...");
+    }
 
     public void reindex() throws InterruptedException {
         FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
@@ -130,38 +134,38 @@ public class CategorizingService {
         return result;
     }
 
-//    public List<Pair<Integer, Float>> findCategoriesAlikeByCategory(String description) {
-//        FullTextEntityManager fullTextEntityManager =
-//                org.hibernate.search.jpa.Search.getFullTextEntityManager(entityManager);
-//
-//        SearchFactory searchFactory = fullTextEntityManager.getSearchFactory();
-//        QueryBuilder qb = searchFactory.buildQueryBuilder().forEntity(Category.class).get();
-//
-//        Product product = new Product();
-//        product.setDescription(description);
-//
-//        Category category = new Category();
-//        category.setProducts(Collections.singletonList(product));
-//
-//        org.apache.lucene.search.Query query = qb
-//                .moreLikeThis()
-//                .comparingField("products")
-//                .toEntity(category)
-//                .createQuery();
-//
-//        FullTextQuery persistenceQuery =
-//                fullTextEntityManager.createFullTextQuery(query, Category.class);
-//
-//        persistenceQuery.setMaxResults(10);
-//
-//        persistenceQuery.setProjection("id", ProjectionConstants.SCORE);
-//
-//        List<Pair<Integer, Float>> result = ((List<Object[]>) persistenceQuery.getResultList()).stream()
-//                .map(r -> Pair.of((Integer) r[0], (Float) r[1])).collect(toList());
-//
-//        Collections.sort(result, (a, b) -> Float.compare(b.getRight(), a.getRight()));
-//
-//        return result;
-//    }
+    public List<Pair<Integer, Float>> findCategoriesAlikeByCategory(String description) {
+        FullTextEntityManager fullTextEntityManager =
+                org.hibernate.search.jpa.Search.getFullTextEntityManager(entityManager);
+
+        SearchFactory searchFactory = fullTextEntityManager.getSearchFactory();
+        QueryBuilder qb = searchFactory.buildQueryBuilder().forEntity(Category.class).get();
+
+        Product product = new Product();
+        product.setDescription(description);
+
+        Category category = new Category();
+        category.setProducts(Collections.singletonList(product));
+
+        org.apache.lucene.search.Query query = qb
+                .moreLikeThis()
+                .comparingField("products")
+                .toEntity(category)
+                .createQuery();
+
+        FullTextQuery persistenceQuery =
+                fullTextEntityManager.createFullTextQuery(query, Category.class);
+
+        persistenceQuery.setMaxResults(10);
+
+        persistenceQuery.setProjection("id", ProjectionConstants.SCORE);
+
+        List<Pair<Integer, Float>> result = ((List<Object[]>) persistenceQuery.getResultList()).stream()
+                .map(r -> Pair.of((Integer) r[0], (Float) r[1])).collect(toList());
+
+        Collections.sort(result, (a, b) -> Float.compare(b.getRight(), a.getRight()));
+
+        return result;
+    }
 }
 

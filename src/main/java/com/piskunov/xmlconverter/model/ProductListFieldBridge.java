@@ -1,8 +1,7 @@
 package com.piskunov.xmlconverter.model;
 
 import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.document.StringField;
+import org.apache.lucene.document.TextField;
 import org.hibernate.search.bridge.FieldBridge;
 import org.hibernate.search.bridge.LuceneOptions;
 
@@ -24,12 +23,9 @@ public class ProductListFieldBridge implements FieldBridge {
         String categoryDescription = products.stream()
                 .map(Product::getDescription).collect(Collectors.joining("\n"));
 
-//        Field field = new StringField(name, categoryDescription, luceneOptions.getStore());
-//        field.setBoost(luceneOptions.getBoost());
-//        field.set
-//        luceneOptions.a
-//
-//
-//        document.add(new StringField(name, categoryDescription, Field.Store.NO));
+        TextField field = new TextField(name, categoryDescription, luceneOptions.getStore());
+        field.setBoost(luceneOptions.getBoost());
+
+        document.add(field);
     }
 }

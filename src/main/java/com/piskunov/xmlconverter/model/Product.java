@@ -6,10 +6,10 @@ import org.apache.lucene.analysis.core.StopFilterFactory;
 import org.apache.lucene.analysis.de.GermanStemFilterFactory;
 import org.apache.lucene.analysis.standard.StandardTokenizerFactory;
 import org.hibernate.search.annotations.*;
+import org.hibernate.search.annotations.Index;
+import org.hibernate.search.annotations.Parameter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Created by echo on 02/11/2016.
@@ -32,6 +32,7 @@ import javax.persistence.Table;
                                 @Parameter(name = "ignoreCase", value = "true")
                         }),
                         @TokenFilterDef(factory = GermanStemFilterFactory.class)
+                        //todo: check umlauts, seems like GermanStemFilter just truncates them without adding 'e'
                 })
 })
 
@@ -49,9 +50,9 @@ public class Product extends BaseEntity {
     @Column(name = "description")
     private String description;
 
-//    @ManyToOne(fetch = FetchType.LAZY, optional = true)
-//    @JoinColumn(name = "category_id", nullable = false, updatable = false, insertable = false)
-//    private Category category;
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "category_id", nullable = false, updatable = false, insertable = false)
+    private Category category;
 
     public int getCategoryId() {
         return categoryId;
@@ -77,11 +78,11 @@ public class Product extends BaseEntity {
         this.description = description;
     }
 
-//    public Category getCategory() {
-//        return category;
-//    }
-//
-//    public void setCategory(Category category) {
-//        this.category = category;
-//    }
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
 }

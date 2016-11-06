@@ -26,11 +26,16 @@ public class CategorizingServiceTest {
 
     @Test
     public void testMoreLikeThis(){
-        List<Pair<Integer, Float>> result = categorizingService
-                .findCategoriesAlikeByProduct("Designs zu fast jedem Bett kombiniert werden. Ob im Schlaf-, Jugend- oder Kinderzimmer das Nachtschränkchen macht überall eine gute Figur");
+        String description = "\"Designs zu fast jedem Bett kombiniert werden. Ob im Schlaf-, Jugend- oder Kinderzimmer das Nachtschränkchen macht überall eine gute Figur\"";
 
-        assertThat(result, is(not(empty())));
+        List<Pair<Integer, Float>> byProduct = categorizingService
+                .findCategoriesAlikeByProduct(description);
 
-        assertThat(result.get(0).getLeft(), is(equalTo(784)));
+        List<Pair<Integer, Float>> byCategory = categorizingService
+                .findCategoriesAlikeByCategory(description);
+
+        assertThat(byProduct, is(not(empty())));
+
+        assertThat(byProduct.get(0).getLeft(), is(equalTo(784)));
     }
 }

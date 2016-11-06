@@ -1,6 +1,5 @@
 package com.piskunov.xmlconverter.model;
 
-import com.aggregator.common.model.BaseEntity;
 import org.hibernate.search.annotations.*;
 import org.hibernate.search.annotations.Index;
 
@@ -10,9 +9,9 @@ import java.util.List;
 /**
  * Created by echo on 02/11/2016.
  */
-//@Entity
-//@Indexed
-//@Table(schema = "xmlconverter", name = "categories")
+@Entity
+@Indexed
+@Table(schema = "xmlconverter", name = "categories")
 public class Category {
     @Id
     private int id;
